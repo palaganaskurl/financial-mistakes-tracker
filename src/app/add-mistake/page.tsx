@@ -68,7 +68,7 @@ const formSchema = z.object({
 
 export default function AddMistakePage() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     defaultValues: {
       amount: 0,
       date: new Date(),

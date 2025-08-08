@@ -1,10 +1,7 @@
-import { CalendarDays, CirclePlus, House } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import {
   Card,
-  CardAction,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,18 +13,18 @@ const STARTING_BALANCE = {
   date: new Date("2025-08-01"),
 };
 
-const PLANNED_MISTAKES = [
-  {
-    date: new Date("2025-08-05"),
-    description: "House Rent",
-    details: "The monthly rent for the apartment is due.",
-  },
-  {
-    date: new Date("2025-08-07"),
-    description: "Internet Bill",
-    details: "The monthly internet bill is due.",
-  },
-];
+// const PLANNED_MISTAKES = [
+//   {
+//     date: new Date("2025-08-05"),
+//     description: "House Rent",
+//     details: "The monthly rent for the apartment is due.",
+//   },
+//   {
+//     date: new Date("2025-08-07"),
+//     description: "Internet Bill",
+//     details: "The monthly internet bill is due.",
+//   },
+// ];
 
 export default function HomePage() {
   const currentDate = new Date();
