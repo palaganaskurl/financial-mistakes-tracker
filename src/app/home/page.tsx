@@ -10,7 +10,7 @@ import {
   CardBody,
   Text,
 } from "grommet";
-import { Favorite, ShareOption, Schedule } from "grommet-icons";
+import { Schedule } from "grommet-icons";
 
 const STARTING_BALANCE = {
   amount: 100000,
