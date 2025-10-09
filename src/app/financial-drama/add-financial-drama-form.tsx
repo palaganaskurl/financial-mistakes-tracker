@@ -39,8 +39,6 @@ export default function AddFinancialDramaForm() {
     },
   });
 
-  console.log("formState", formState.errors);
-
   const [formSubmissionState, dispatch, pending] = useActionState(
     async (
       state: boolean | null,
