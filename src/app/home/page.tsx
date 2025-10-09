@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardBody,
   Text,
-  Skeleton,
 } from "grommet";
 import { Schedule } from "grommet-icons";
 import { Suspense } from "react";
