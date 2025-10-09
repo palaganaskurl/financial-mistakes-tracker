@@ -1,11 +1,17 @@
-import { CalendarDays } from "lucide-react";
+import BottomNav from "@/components/custom/bottom-nav";
+import MistakesList from "./mistakes-list";
 import {
+  Main,
+  PageHeader,
+  Button,
+  Heading,
+  Box,
   Card,
-  CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import BottomNav from "@/components/ui/bottom-nav";
+  CardBody,
+  CardFooter,
+} from "grommet";
+import { Favorite, ShareOption, Schedule } from "grommet-icons";
 
 const STARTING_BALANCE = {
   amount: 100000,
@@ -32,44 +38,61 @@ export default function HomePage() {
   const currentYear = currentDate.getFullYear();
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex gap-2 items-center">
-        <CalendarDays />
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {currentMonth} {currentYear}
-        </h3>
-      </div>
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Balance</CardTitle>
-          <CardDescription>
+    <>
+      <Main pad="large" style={{ height: "calc(100vh - 72px)" }}>
+        <PageHeader
+          title={
+            <Box direction="row" align="center" gap="small">
+              <Schedule size="medium" />
+              <Heading size="medium">
+                {currentMonth} {currentYear}
+              </Heading>
+            </Box>
+          }
+        />
+        <Card height="small" background="light-1">
+          <CardHeader pad="medium">Balance</CardHeader>
+          <CardBody pad="medium">
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: STARTING_BALANCE.currency,
             }).format(STARTING_BALANCE.amount)}
-          </CardDescription>
-        </CardHeader>
-      </Card>
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Forecasted Balance From Mistakes By Date</CardTitle>
-          <CardDescription>
+          </CardBody>
+          <CardFooter pad={{ horizontal: "small" }} background="light-2">
+            <Button icon={<Favorite color="red" />} hoverIndicator />
+            <Button icon={<ShareOption color="plain" />} hoverIndicator />
+          </CardFooter>
+        </Card>
+        <Card height="small" background="light-1">
+          <CardHeader pad="medium">
+            Forecasted Balance From Mistakes By Date
+          </CardHeader>
+          <CardBody pad="medium">
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: STARTING_BALANCE.currency,
             }).format(STARTING_BALANCE.amount)}
-          </CardDescription>
-        </CardHeader>
-      </Card>
-      <div className="mt-4">
-        <div>
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Mistakes
-          </h4>
+          </CardBody>
+          <CardFooter pad={{ horizontal: "small" }} background="light-2">
+            <Button icon={<Favorite color="red" />} hoverIndicator />
+            <Button icon={<ShareOption color="plain" />} hoverIndicator />
+          </CardFooter>
+        </Card>
+        <div className="mt-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                Mistakes
+              </h4>
+            </div>
+            <div className="font-bold">View All</div>
+          </div>
+          <div className="mt-4">
+            <MistakesList />
+          </div>
         </div>
-        <div></div>
-      </div>
+      </Main>
       <BottomNav />
-    </div>
+    </>
   );
 }
