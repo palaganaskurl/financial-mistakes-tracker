@@ -60,7 +60,9 @@ export default function AddFinancialDramaForm() {
   }
 
   if (formSubmissionState) {
-    redirect("/home");
+    setTimeout(() => {
+      redirect("/home");
+    }, 1500);
   }
 
   const FinancialDramaRadio = [
@@ -153,7 +155,14 @@ export default function AddFinancialDramaForm() {
             vertical: "medium",
           }}
         >
-          <Button type="submit" primary label="Submit" />
+          <Button
+            type="submit"
+            primary
+            label="Submit"
+            disabled={pending}
+            busy={pending}
+            size="large"
+          />
         </Box>
         {formSubmissionState && (
           <Notification
@@ -161,7 +170,6 @@ export default function AddFinancialDramaForm() {
             status="info"
             title="Success!"
             message="Successfully added financial drama!"
-            // onClose={() => setVisible(false)}
           />
         )}
       </Form>
