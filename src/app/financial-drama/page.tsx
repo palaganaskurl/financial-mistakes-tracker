@@ -2,8 +2,10 @@
 
 import AddFinancialDramaForm from "@/app/financial-drama/add-financial-drama-form";
 import BottomNav from "@/components/custom/bottom-nav";
-
 import { Box, Heading, Main, PageHeader } from "grommet";
+
+// TODO: Remove this once we have auth
+export const dynamic = "force-dynamic";
 
 /**
  * TODOs:

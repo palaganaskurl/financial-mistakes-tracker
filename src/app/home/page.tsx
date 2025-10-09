@@ -22,6 +22,9 @@ const STARTING_BALANCE = {
   date: new Date("2025-08-01"),
 };
 
+// TODO: Remove this once we have auth
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   const currentDate = new Date();
   const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
