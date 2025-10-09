@@ -42,11 +42,11 @@ export default function AddFinancialDramaForm() {
   const [formSubmissionState, dispatch, pending] = useActionState(
     async (
       state: boolean | null,
-      values: z.infer<typeof FinancialDramaFormSchema>,
+      values: z.infer<typeof FinancialDramaFormSchema>
     ) => {
       return await addMistake(values);
     },
-    null,
+    null
   );
 
   async function onSubmit(values: z.infer<typeof FinancialDramaFormSchema>) {
@@ -58,7 +58,7 @@ export default function AddFinancialDramaForm() {
   if (formSubmissionState) {
     setTimeout(() => {
       redirect("/home");
-    }, 1500);
+    }, 1000);
   }
 
   const FinancialDramaRadio = [
@@ -115,7 +115,7 @@ export default function AddFinancialDramaForm() {
             <DateInput
               name="date"
               format="mm/dd/yyyy"
-              value={new Date().toISOString()}
+              defaultValue={new Date().toISOString()}
             />
           </FormField>
           <Controller

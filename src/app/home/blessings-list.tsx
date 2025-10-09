@@ -1,16 +1,16 @@
-import { MistakeCategoryToLabelMap } from "@/constants";
+import { BlessingCategoryToLabelMap } from "@/constants";
 import { getDb } from "@/db/postgres";
 import { financialDramaTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { Box, Grid } from "grommet";
 import React from "react";
 
-export default async function MistakesList() {
+export default async function BlessingsList() {
   const db = getDb();
-  const mistakes = await db
+  const blessings = await db
     .select()
     .from(financialDramaTable)
-    .where(eq(financialDramaTable.type, "mistake"))
+    .where(eq(financialDramaTable.type, "blessing"))
     .orderBy(desc(financialDramaTable.date))
     .limit(5);
 
@@ -22,24 +22,22 @@ export default async function MistakesList() {
       }}
       gap="small"
     >
-      {mistakes.map((mistake) => (
-        <React.Fragment key={mistake.id.toString()}>
-          <Box>{MistakeCategoryToLabelMap[mistake.category]}</Box>
+      {blessings.map((blessing) => (
+        <React.Fragment key={blessing.id.toString()}>
+          <Box>{BlessingCategoryToLabelMap[blessing.category]}</Box>
           <Box align="end">
             {new Intl.DateTimeFormat("en-PH", {
               dateStyle: "medium",
-            }).format(mistake.date)}
+            }).format(blessing.date)}
           </Box>
           <Box align="end">
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
-            }).format(mistake.amount)}
+            }).format(blessing.amount)}
           </Box>
         </React.Fragment>
       ))}
     </Grid>
   );
-
-  return <Box gap="medium"></Box>;
 }

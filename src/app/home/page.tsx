@@ -9,8 +9,13 @@ import {
   CardHeader,
   CardBody,
   Text,
+  Skeleton,
 } from "grommet";
 import { Schedule } from "grommet-icons";
+import { Suspense } from "react";
+import CurrentBalance from "./current-balance";
+import FinancialDramaSkeleton from "./financial-drama-skeleton";
+import BlessingsList from "./blessings-list";
 
 const STARTING_BALANCE = {
   amount: 100000,
@@ -41,8 +46,9 @@ export default function HomePage() {
       <Main
         pad={{
           horizontal: "large",
+          bottom: "large",
         }}
-        style={{ height: "calc(100vh - 72px)" }}
+        style={{ height: "calc(100dvh - 72px)" }}
       >
         <PageHeader
           title={
@@ -55,15 +61,7 @@ export default function HomePage() {
           }
         />
         <Box gap="medium">
-          <Card>
-            <CardHeader pad="medium">Balance</CardHeader>
-            <CardBody pad="medium">
-              {new Intl.NumberFormat("en-PH", {
-                style: "currency",
-                currency: STARTING_BALANCE.currency,
-              }).format(STARTING_BALANCE.amount)}
-            </CardBody>
-          </Card>
+          <CurrentBalance />
           <Card>
             <CardHeader pad="medium">
               Forecasted Balance From Mistakes By Date
@@ -83,12 +81,30 @@ export default function HomePage() {
           justify="between"
         >
           <Heading margin="none" size="small">
-            Mistakes
+            Recent Mistakes
           </Heading>
           <Text>View All</Text>
         </Box>
         <Box margin={{ top: "large" }}>
-          <MistakesList />
+          <Suspense fallback={<FinancialDramaSkeleton />}>
+            <MistakesList />
+          </Suspense>
+        </Box>
+        <Box
+          margin={{ top: "large" }}
+          direction="row"
+          align="center"
+          justify="between"
+        >
+          <Heading margin="none" size="small">
+            Recent Blessings
+          </Heading>
+          <Text>View All</Text>
+        </Box>
+        <Box margin={{ top: "large" }}>
+          <Suspense fallback={<FinancialDramaSkeleton />}>
+            <BlessingsList />
+          </Suspense>
         </Box>
       </Main>
       <BottomNav />

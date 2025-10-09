@@ -13,7 +13,12 @@ import { Box, Heading, Main, PageHeader } from "grommet";
 export default function AddFinancialDramaPage() {
   return (
     <>
-      <Main pad="large" style={{ height: "calc(100vh - 72px)" }}>
+      <Main
+        pad={{
+          horizontal: "large",
+        }}
+        style={{ height: "calc(100dvh - 72px)" }}
+      >
         <PageHeader
           title={
             <Box direction="row" align="center" gap="small">
