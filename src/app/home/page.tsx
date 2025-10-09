@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
+  Text,
 } from "grommet";
 import { Favorite, ShareOption, Schedule } from "grommet-icons";
 
@@ -39,58 +40,58 @@ export default function HomePage() {
 
   return (
     <>
-      <Main pad="large" style={{ height: "calc(100vh - 72px)" }}>
+      <Main
+        pad={{
+          horizontal: "large",
+        }}
+        style={{ height: "calc(100vh - 72px)" }}
+      >
         <PageHeader
           title={
-            <Box direction="row" align="center" gap="small">
-              <Schedule size="medium" />
+            <Box direction="row" align="center" gap="medium">
+              <Schedule size="large" color="black" />
               <Heading size="medium">
                 {currentMonth} {currentYear}
               </Heading>
             </Box>
           }
         />
-        <Card height="small" background="light-1">
-          <CardHeader pad="medium">Balance</CardHeader>
-          <CardBody pad="medium">
-            {new Intl.NumberFormat("en-PH", {
-              style: "currency",
-              currency: STARTING_BALANCE.currency,
-            }).format(STARTING_BALANCE.amount)}
-          </CardBody>
-          <CardFooter pad={{ horizontal: "small" }} background="light-2">
-            <Button icon={<Favorite color="red" />} hoverIndicator />
-            <Button icon={<ShareOption color="plain" />} hoverIndicator />
-          </CardFooter>
-        </Card>
-        <Card height="small" background="light-1">
-          <CardHeader pad="medium">
-            Forecasted Balance From Mistakes By Date
-          </CardHeader>
-          <CardBody pad="medium">
-            {new Intl.NumberFormat("en-PH", {
-              style: "currency",
-              currency: STARTING_BALANCE.currency,
-            }).format(STARTING_BALANCE.amount)}
-          </CardBody>
-          <CardFooter pad={{ horizontal: "small" }} background="light-2">
-            <Button icon={<Favorite color="red" />} hoverIndicator />
-            <Button icon={<ShareOption color="plain" />} hoverIndicator />
-          </CardFooter>
-        </Card>
-        <div className="mt-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-                Mistakes
-              </h4>
-            </div>
-            <div className="font-bold">View All</div>
-          </div>
-          <div className="mt-4">
-            <MistakesList />
-          </div>
-        </div>
+        <Box gap="medium">
+          <Card>
+            <CardHeader pad="medium">Balance</CardHeader>
+            <CardBody pad="medium">
+              {new Intl.NumberFormat("en-PH", {
+                style: "currency",
+                currency: STARTING_BALANCE.currency,
+              }).format(STARTING_BALANCE.amount)}
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader pad="medium">
+              Forecasted Balance From Mistakes By Date
+            </CardHeader>
+            <CardBody pad="medium">
+              {new Intl.NumberFormat("en-PH", {
+                style: "currency",
+                currency: STARTING_BALANCE.currency,
+              }).format(STARTING_BALANCE.amount)}
+            </CardBody>
+          </Card>
+        </Box>
+        <Box
+          margin={{ top: "large" }}
+          direction="row"
+          align="center"
+          justify="between"
+        >
+          <Heading margin="none" size="small">
+            Mistakes
+          </Heading>
+          <Text>View All</Text>
+        </Box>
+        <Box margin={{ top: "large" }}>
+          <MistakesList />
+        </Box>
       </Main>
       <BottomNav />
     </>

@@ -1,29 +1,31 @@
 import { MistakeCategoryToLabelMap } from "@/constants";
 import { getDb } from "@/db/postgres";
 import { financialDramaTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { Box } from "grommet";
 
 export default async function MistakesList() {
   const db = getDb();
 
-  const mistakes = await db.select().from(financialDramaTable).limit(5);
-
-  return <>TODO</>;
+  const mistakes = await db
+    .select()
+    .from(financialDramaTable)
+    .where(eq(financialDramaTable.type, "mistake"))
+    .limit(5);
 
   return (
-    <div className="flex flex-col gap-4">
+    <Box gap="medium">
       {mistakes.map((mistake) => (
-        <div key={mistake.id} className="flex justify-between gap-4">
-          <div className="flex gap-4">
-            <div>{MistakeCategoryToLabelMap[mistake.category]}</div>
-          </div>
-          <div>
+        <Box direction="row" justify="between" key={mistake.id.toString()}>
+          <Box>{MistakeCategoryToLabelMap[mistake.category]}</Box>
+          <Box>
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
             }).format(mistake.amount)}
-          </div>
-        </div>
+          </Box>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 }
