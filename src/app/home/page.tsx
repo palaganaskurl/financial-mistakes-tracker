@@ -3,13 +3,11 @@ import MistakesList from "./mistakes-list";
 import {
   Main,
   PageHeader,
-  Button,
   Heading,
   Box,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Text,
 } from "grommet";
 import { Favorite, ShareOption, Schedule } from "grommet-icons";
