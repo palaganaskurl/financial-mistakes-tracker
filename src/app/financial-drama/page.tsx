@@ -1,18 +1,24 @@
-"use client";
-
 import AddFinancialDramaForm from "@/app/financial-drama/add-financial-drama-form";
 import BottomNav from "@/components/custom/bottom-nav";
+import { auth } from "@/lib/auth";
 import { Box, Heading, Main, PageHeader } from "grommet";
-
-// TODO: Remove this once we have auth
-export const dynamic = "force-dynamic";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
  * TODOs:
  * - Add account selection for multi-account support.
  * - Update categories.
  */
-export default function AddFinancialDramaPage() {
+export default async function AddFinancialDramaPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   return (
     <>
       <Main
@@ -29,7 +35,7 @@ export default function AddFinancialDramaPage() {
           }
         />
         <Box>
-          <AddFinancialDramaForm />
+          <AddFinancialDramaForm userId={session.user.id} />
         </Box>
       </Main>
       <BottomNav />

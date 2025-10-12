@@ -15,6 +15,9 @@ import { Suspense } from "react";
 import CurrentBalance from "./current-balance";
 import FinancialDramaSkeleton from "./financial-drama-skeleton";
 import BlessingsList from "./blessings-list";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 const STARTING_BALANCE = {
   amount: 100000,
@@ -22,10 +25,15 @@ const STARTING_BALANCE = {
   date: new Date("2025-08-01"),
 };
 
-// TODO: Remove this once we have auth
-export const dynamic = "force-dynamic";
+export default async function HomePage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-export default function HomePage() {
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   const currentDate = new Date();
   const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
   const currentYear = currentDate.getFullYear();

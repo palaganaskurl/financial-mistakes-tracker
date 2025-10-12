@@ -1,3 +1,4 @@
+import { user } from "@/db/auth-schema";
 import { z } from "zod";
 
 export const MistakeCategories = [
@@ -13,10 +14,10 @@ export const MistakeCategories = [
   { label: "Miscellaneous", value: "miscellaneous" },
 ];
 export const MistakeCategoriesValues = MistakeCategories.map(
-  (category) => category.value,
+  (category) => category.value
 );
 export const MistakeCategoryToLabelMap = Object.fromEntries(
-  MistakeCategories.map((category) => [category.value, category.label]),
+  MistakeCategories.map((category) => [category.value, category.label])
 );
 export const BlessingCategories = [
   { label: "Salary", value: "salary" },
@@ -33,10 +34,10 @@ export const BlessingCategories = [
   { label: "Other", value: "other" },
 ];
 export const BlessingCategoriesValues = BlessingCategories.map(
-  (category) => category.value,
+  (category) => category.value
 );
 export const BlessingCategoryToLabelMap = Object.fromEntries(
-  BlessingCategories.map((category) => [category.value, category.label]),
+  BlessingCategories.map((category) => [category.value, category.label])
 );
 
 export const FinancialDramaTypes = ["mistake", "blessing"] as const;
@@ -54,14 +55,15 @@ export const FinancialDramaFormSchema = z
     category: z.string({ message: "Please select a category." }),
     is_planned: z.boolean().default(true).optional(),
     notes: z.coerce.string().optional(),
+    user_id: z.string().nonempty({ message: "User ID is required." }),
   })
   .superRefine((data, ctx) => {
     const validCategories: string[] =
       data.type === "mistake"
         ? MistakeCategories.map((c) => c.value)
         : data.type === "blessing"
-          ? BlessingCategories.map((c) => c.value)
-          : [];
+        ? BlessingCategories.map((c) => c.value)
+        : [];
 
     if (!validCategories.includes(data.category)) {
       ctx.addIssue({
@@ -71,3 +73,29 @@ export const FinancialDramaFormSchema = z
       });
     }
   });
+
+export const MAX_PASSWORD_LENGTH = 6;
+
+export const SignUpFormSchema = z
+  .object({
+    email: z.email({ message: "Invalid email address." }),
+    password: z.string().min(MAX_PASSWORD_LENGTH, {
+      message: "Password must be at least 6 characters.",
+    }),
+    confirmPassword: z.string().min(MAX_PASSWORD_LENGTH, {
+      message: "Confirm Password must be at least 6 characters.",
+    }),
+    // Ensure passwords match
+    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match.",
+    path: ["confirmPassword"],
+  });
+
+export const SignInFormSchema = z.object({
+  email: z.email({ message: "Invalid email address." }),
+  password: z.string().min(MAX_PASSWORD_LENGTH, {
+    message: "Password must be at least 6 characters.",
+  }),
+});

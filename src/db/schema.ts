@@ -11,7 +11,9 @@ import {
   boolean,
   varchar,
   decimal,
+  text,
 } from "drizzle-orm/pg-core";
+import { user } from "./auth-schema";
 
 // TODO: Check if there's a way to validate the enum
 //  depending on the type of financial drama
@@ -43,4 +45,7 @@ export const financialDramaTable = pgTable("financialDrama", {
     precision: 6,
     withTimezone: true,
   }).defaultNow(),
+  user_id: text("user_id")
+    .references(() => user.id, { onDelete: "cascade" })
+    .notNull(),
 });

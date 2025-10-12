@@ -25,7 +25,7 @@ import {
   Notification,
 } from "grommet";
 
-export default function AddFinancialDramaForm() {
+export default function AddFinancialDramaForm({ userId }: { userId: string }) {
   const { register, handleSubmit, watch, formState, control } = useForm<
     z.infer<typeof FinancialDramaFormSchema>
   >({
@@ -36,6 +36,7 @@ export default function AddFinancialDramaForm() {
       date: new Date(),
       is_planned: true,
       notes: "",
+      user_id: userId,
     },
   });
 
