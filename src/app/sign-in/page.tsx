@@ -20,20 +20,16 @@ export default function SignInPage() {
     },
   });
 
-  const [formSubmissionState, dispatch, pending] = useActionState(
+  const [, dispatch, pending] = useActionState(
     async (state: boolean | null, values: z.infer<typeof SignInFormSchema>) => {
-      const { data, error } = await authClient.signIn.email(
+      const { error } = await authClient.signIn.email(
         {
           email: values.email,
           password: values.password,
           callbackURL: "/home",
         },
         {
-          onRequest: (ctx) => {
-            //show loading
-          },
-          onSuccess: (ctx) => {
-            //redirect to the dashboard or sign in page
+          onSuccess: () => {
             redirect("/home");
           },
           onError: (ctx) => {
@@ -42,7 +38,7 @@ export default function SignInPage() {
         }
       );
 
-      return true;
+      return error !== null;
     },
     null
   );

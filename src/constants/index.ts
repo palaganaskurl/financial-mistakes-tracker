@@ -1,4 +1,3 @@
-import { user } from "@/db/auth-schema";
 import { z } from "zod";
 
 export const MistakeCategories = [
