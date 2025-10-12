@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./default.css";
 import "typeface-roboto";
 import { Grommet } from "grommet";
+import StyledComponentsRegistry from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Grommet full theme={theme}>
-          {children}
-        </Grommet>
+        <StyledComponentsRegistry>
+          <Grommet full theme={theme}>
+            {children}
+          </Grommet>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
