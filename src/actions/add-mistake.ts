@@ -12,7 +12,6 @@ export default async function addMistake(
   const data: typeof financialDramaTable.$inferInsert = {
     ...values,
     date: values.date.toISOString(),
-    amount: values.amount.toString(),
   };
 
   try {

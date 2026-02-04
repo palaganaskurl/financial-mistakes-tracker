@@ -18,7 +18,8 @@
     "db:studio": "npx drizzle-kit studio",
     "wrangler-dev": "wrangler dev",
     "wrangler-types": "wrangler types --env-interface CloudflareEnv",
-    "wrangler-migrations": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --local"
+    "wrangler-migrations": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --local",
+    "wrangler-migrations-remote": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote"
   },
   "dependencies": {
     "@chakra-ui/cli": "^3.32.0",
@@ -48,6 +49,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "typescript": "^5",
-    "wrangler": "^4.28.1"
+    "wrangler": "^4.62.0"
   }
 }

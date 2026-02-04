@@ -33,7 +33,7 @@ export default async function BlessingsList() {
           <Text fontSize="sm" textAlign="right" flex={1}>
             {new Intl.DateTimeFormat("en-PH", {
               dateStyle: "medium",
-            }).format(blessing.date)}
+            }).format(new Date(blessing.date))}
           </Text>
           <Text fontSize="sm" fontWeight="medium" textAlign="right" flex={1}>
             {new Intl.NumberFormat("en-PH", {
