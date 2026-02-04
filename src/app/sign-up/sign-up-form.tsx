@@ -14,7 +14,7 @@ export function SignUpForm() {
   const { register, handleSubmit, formState } = useForm<
     z.infer<typeof SignUpFormSchema>
   >({
-    resolver: zodResolver(SignUpFormSchema) as any,
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       email: "",
       password: "",

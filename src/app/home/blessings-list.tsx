@@ -2,7 +2,7 @@ import { BlessingCategoryToLabelMap } from "@/constants";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { Stack, Text, Flex, Box } from "@chakra-ui/react";
+import { Stack, Text, Flex } from "@chakra-ui/react";
 import React from "react";
 
 export default async function BlessingsList() {
@@ -16,7 +16,7 @@ export default async function BlessingsList() {
 
   return (
     <Stack gap={3}>
-      {blessings.map((blessing: any) => (
+      {blessings.map((blessing) => (
         <Flex
           key={blessing.id.toString()}
           justify="space-between"

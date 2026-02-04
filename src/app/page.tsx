@@ -28,7 +28,7 @@ export default function Home() {
   const { register, handleSubmit, formState } = useForm<
     z.infer<typeof SignInFormSchema>
   >({
-    resolver: zodResolver(SignInFormSchema) as any,
+    resolver: zodResolver(SignInFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -119,7 +119,7 @@ export default function Home() {
 
         <Card.Footer justifyContent="center" pt="0">
           <Text fontSize="sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?
             <ChakraLink href="/sign-up" color="blue.600" fontWeight="medium">
               Create one
             </ChakraLink>

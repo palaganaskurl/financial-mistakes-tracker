@@ -151,7 +151,7 @@ export default function AddFinancialDramaForm({ userId }: { userId: string }) {
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
                 >
-                  {categories.map((cat: any) => (
+                  {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.label}
                     </option>

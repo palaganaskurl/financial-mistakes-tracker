@@ -4,7 +4,7 @@ import * as authSchema from "./auth-schema";
 export const financialDramaTable = sqliteTable("financialDrama", {
   id: integer().primaryKey({ autoIncrement: true }),
   type: text().notNull(),
-  amount: text().notNull(),
+  amount: integer().notNull(),
   date: text().notNull(),
   category: text().notNull(),
   is_planned: integer({ mode: "boolean" }).default(true).notNull(),
