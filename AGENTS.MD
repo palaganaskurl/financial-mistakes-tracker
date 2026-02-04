@@ -1,0 +1,2 @@
+- For CSS Framework, we are using https://chakra-ui.com/llms-full.txt.
+- Prioritize mobile first.
