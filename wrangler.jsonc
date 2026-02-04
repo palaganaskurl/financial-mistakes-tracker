@@ -22,5 +22,5 @@
       "database_id": "17b336a9-93c2-4c39-840b-d3a8690d49d6",
       "migrations_dir": "drizzle/",
     },
-  ],
+  ],"env": {"production":{"name":"financial-mistakes-tracker"}},
 }
