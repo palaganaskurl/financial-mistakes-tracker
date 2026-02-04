@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod/v4";
@@ -9,21 +10,20 @@ import {
   FinancialDramaFormSchema,
   BlessingCategories,
 } from "@/constants";
-import React, { startTransition, useActionState } from "react";
 import { redirect } from "next/navigation";
 import {
-  Button,
   Box,
-  Form,
-  FormField,
-  TextInput,
-  RadioButtonGroup,
-  DateInput,
-  Select,
-  CheckBox,
-  TextArea,
-  Notification,
-} from "grommet";
+  Stack,
+  Input,
+  Textarea,
+  Button,
+  HStack,
+  Field,
+  RadioGroup,
+  Checkbox,
+  NativeSelect,
+} from "@chakra-ui/react";
+import { Toaster, toaster } from "@/components/ui/toaster";
 
 export default function AddFinancialDramaForm({ userId }: { userId: string }) {
   const { register, handleSubmit, watch, formState, control } = useForm<
@@ -40,136 +40,166 @@ export default function AddFinancialDramaForm({ userId }: { userId: string }) {
     },
   });
 
-  const [formSubmissionState, dispatch, pending] = useActionState(
-    async (
-      state: boolean | null,
-      values: z.infer<typeof FinancialDramaFormSchema>
-    ) => {
-      return await addMistake(values);
-    },
-    null
-  );
+  const [pending, setPending] = useState(false);
 
   async function onSubmit(values: z.infer<typeof FinancialDramaFormSchema>) {
-    startTransition(() => {
-      dispatch(values);
-    });
+    setPending(true);
+    try {
+      const result = await addMistake(values);
+      if (result) {
+        toaster.create({
+          title: "Success!",
+          description: "Successfully added financial drama!",
+          type: "success",
+          duration: 3000,
+        });
+        setTimeout(() => {
+          redirect("/home");
+        }, 1000);
+      } else {
+        toaster.create({
+          title: "Error",
+          description: "Failed to add financial drama.",
+          type: "error",
+          duration: 3000,
+        });
+      }
+    } finally {
+      setPending(false);
+    }
   }
-
-  if (formSubmissionState) {
-    setTimeout(() => {
-      redirect("/home");
-    }, 1000);
-  }
-
-  const FinancialDramaRadio = [
-    {
-      value: "mistake",
-      label: "Mistake",
-      disabled: false,
-      id: "mistake",
-    },
-    {
-      value: "blessing",
-      label: "Blessing",
-      disabled: false,
-      id: "blessing",
-    },
-  ];
 
   const currentType = watch("type");
   const categories =
     currentType === "mistake" ? MistakeCategories : BlessingCategories;
 
   return (
-    <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Box gap="medium">
-          <Controller
-            name="type"
-            control={control}
-            render={({ field }) => (
-              <FormField name="type" htmlFor="type" label="Financial Drama">
-                <RadioButtonGroup
-                  id="type"
-                  defaultValue="mistake"
-                  options={FinancialDramaRadio}
-                  {...field}
-                />
-              </FormField>
-            )}
-          />
-          <FormField
-            name="amount"
-            htmlFor="amount"
-            label="Amount"
-            error={formState.errors.amount?.message}
-          >
-            <TextInput id="amount" type="number" {...register("amount")} />
-          </FormField>
-          <FormField
-            name="date"
-            htmlFor="date"
-            label="Date"
-            error={formState.errors.date?.message}
-          >
-            <DateInput
-              name="date"
-              format="mm/dd/yyyy"
-              defaultValue={new Date().toISOString()}
-            />
-          </FormField>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <FormField
-                name="category"
-                htmlFor="category"
-                label="Category"
-                error={formState.errors.category?.message}
+    <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Stack gap={6}>
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <Field.Root>
+              <Field.Label>Financial Drama</Field.Label>
+              <RadioGroup.Root
+                value={field.value}
+                onValueChange={(details) => field.onChange(details.value)}
               >
-                <Select
-                  options={categories}
-                  valueKey={{ key: "value", reduce: true }}
-                  labelKey="label"
-                  {...field}
-                />
-              </FormField>
-            )}
+                <HStack gap={4}>
+                  <RadioGroup.Item value="mistake">
+                    <RadioGroup.ItemHiddenInput />
+                    <RadioGroup.ItemControl>
+                      <RadioGroup.ItemIndicator />
+                    </RadioGroup.ItemControl>
+                    <RadioGroup.ItemText>Mistake</RadioGroup.ItemText>
+                  </RadioGroup.Item>
+                  <RadioGroup.Item value="blessing">
+                    <RadioGroup.ItemHiddenInput />
+                    <RadioGroup.ItemControl>
+                      <RadioGroup.ItemIndicator />
+                    </RadioGroup.ItemControl>
+                    <RadioGroup.ItemText>Blessing</RadioGroup.ItemText>
+                  </RadioGroup.Item>
+                </HStack>
+              </RadioGroup.Root>
+            </Field.Root>
+          )}
+        />
+
+        <Field.Root invalid={!!formState.errors.amount}>
+          <Field.Label>Amount</Field.Label>
+          <Input
+            type="number"
+            placeholder="Enter amount"
+            {...register("amount", { valueAsNumber: true })}
           />
-          <FormField name="is_planned" htmlFor="is_planned" label="Is Planned?">
-            <CheckBox label="Is Planned?" {...register("is_planned")} />
-          </FormField>
-          <FormField name="notes" htmlFor="notes" label="Notes">
-            <TextArea placeholder="Notes" {...register("notes")} />
-          </FormField>
-        </Box>
-        <Box
-          direction="row"
-          gap="medium"
-          margin={{
-            vertical: "medium",
-          }}
+          <Field.ErrorText>{formState.errors.amount?.message}</Field.ErrorText>
+        </Field.Root>
+
+        <Controller
+          name="date"
+          control={control}
+          render={({ field }) => (
+            <Field.Root invalid={!!formState.errors.date}>
+              <Field.Label>Date</Field.Label>
+              <Input
+                type="date"
+                value={
+                  field.value instanceof Date
+                    ? field.value.toISOString().split("T")[0]
+                    : field.value
+                }
+                onChange={(e) => field.onChange(new Date(e.target.value))}
+              />
+              <Field.ErrorText>
+                {formState.errors.date?.message}
+              </Field.ErrorText>
+            </Field.Root>
+          )}
+        />
+
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <Field.Root invalid={!!formState.errors.category}>
+              <Field.Label>Category</Field.Label>
+              <NativeSelect.Root>
+                <NativeSelect.Field
+                  placeholder="Select category"
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                >
+                  {categories.map((cat: any) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </NativeSelect.Field>
+                <NativeSelect.Indicator />
+              </NativeSelect.Root>
+              <Field.ErrorText>
+                {formState.errors.category?.message}
+              </Field.ErrorText>
+            </Field.Root>
+          )}
+        />
+
+        <Controller
+          name="is_planned"
+          control={control}
+          render={({ field }) => (
+            <Field.Root>
+              <Checkbox.Root
+                checked={field.value}
+                onCheckedChange={(details) => field.onChange(details.checked)}
+              >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control />
+                <Checkbox.Label>Is Planned?</Checkbox.Label>
+              </Checkbox.Root>
+            </Field.Root>
+          )}
+        />
+
+        <Field.Root invalid={!!formState.errors.notes}>
+          <Field.Label>Notes</Field.Label>
+          <Textarea placeholder="Enter notes" {...register("notes")} />
+          <Field.ErrorText>{formState.errors.notes?.message}</Field.ErrorText>
+        </Field.Root>
+
+        <Button
+          type="submit"
+          colorPalette="blue"
+          size="lg"
+          loading={pending}
+          disabled={pending}
         >
-          <Button
-            type="submit"
-            primary
-            label="Submit"
-            disabled={pending}
-            busy={pending}
-            size="large"
-          />
-        </Box>
-        {formSubmissionState && (
-          <Notification
-            toast
-            status="info"
-            title="Success!"
-            message="Successfully added financial drama!"
-          />
-        )}
-      </Form>
-    </>
+          Submit
+        </Button>
+      </Stack>
+      <Toaster />
+    </Box>
   );
 }

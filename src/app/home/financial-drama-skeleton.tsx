@@ -1,13 +1,13 @@
-import { Box, Skeleton } from "grommet";
+import { Stack, Skeleton } from "@chakra-ui/react";
 
 export default function FinancialDramaSkeleton() {
   return (
-    <Box gap="medium">
-      <Skeleton height="xxsmall" round="xsmall" />
-      <Skeleton height="xxsmall" round="xsmall" />
-      <Skeleton height="xxsmall" round="xsmall" />
-      <Skeleton height="xxsmall" round="xsmall" />
-      <Skeleton height="xxsmall" round="xsmall" />
-    </Box>
+    <Stack gap={3}>
+      <Skeleton height="40px" borderRadius="md" />
+      <Skeleton height="40px" borderRadius="md" />
+      <Skeleton height="40px" borderRadius="md" />
+      <Skeleton height="40px" borderRadius="md" />
+      <Skeleton height="40px" borderRadius="md" />
+    </Stack>
   );
 }

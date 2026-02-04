@@ -1,12 +1,12 @@
 import { MistakeCategoryToLabelMap } from "@/constants";
-import { getDb } from "@/db/postgres";
+import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { Box, Grid } from "grommet";
+import { Stack, Text, Flex, Box } from "@chakra-ui/react";
 import React from "react";
 
 export default async function MistakesList() {
-  const db = getDb();
+  const db = await getDb();
   const mistakes = await db
     .select()
     .from(financialDramaTable)
@@ -14,32 +14,37 @@ export default async function MistakesList() {
     .orderBy(desc(financialDramaTable.date))
     .limit(5);
 
+  console.log("Mistakes:", mistakes);
+
   return (
-    <Grid
-      columns={{
-        count: 3,
-        size: "auto",
-      }}
-      gap="small"
-    >
-      {mistakes.map((mistake) => (
-        <React.Fragment key={mistake.id.toString()}>
-          <Box>{MistakeCategoryToLabelMap[mistake.category]}</Box>
-          <Box align="end">
+    <Stack gap={3}>
+      {mistakes.map((mistake: any) => (
+        <Flex
+          key={mistake.id.toString()}
+          justify="space-between"
+          align="center"
+          p={3}
+          borderWidth="1px"
+          borderRadius="md"
+          borderColor="gray.200"
+          _hover={{ bg: "gray.50" }}
+        >
+          <Text fontSize="sm" flex={1}>
+            {MistakeCategoryToLabelMap[mistake.category]}
+          </Text>
+          <Text fontSize="sm" textAlign="right" flex={1}>
             {new Intl.DateTimeFormat("en-PH", {
               dateStyle: "medium",
-            }).format(mistake.date)}
-          </Box>
-          <Box align="end">
+            }).format(new Date(mistake.date))}
+          </Text>
+          <Text fontSize="sm" fontWeight="medium" textAlign="right" flex={1}>
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
             }).format(mistake.amount)}
-          </Box>
-        </React.Fragment>
+          </Text>
+        </Flex>
       ))}
-    </Grid>
+    </Stack>
   );
-
-  return <Box gap="medium"></Box>;
 }

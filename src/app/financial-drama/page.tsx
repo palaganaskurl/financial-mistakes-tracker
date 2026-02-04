@@ -1,8 +1,7 @@
 import AddFinancialDramaForm from "@/app/financial-drama/add-financial-drama-form";
 import BottomNav from "@/components/custom/bottom-nav";
-import { auth } from "@/lib/auth";
-import { Box, Heading, Main, PageHeader } from "grommet";
-import { headers } from "next/headers";
+import { Box, Heading, Container, VStack } from "@chakra-ui/react";
+import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 /**
@@ -11,33 +10,33 @@ import { redirect } from "next/navigation";
  * - Update categories.
  */
 export default async function AddFinancialDramaPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
-  if (!session) {
-    redirect("/sign-in");
+  if (!session.isLoggedIn) {
+    redirect("/");
   }
+
+  const userId = session.userId!;
 
   return (
     <>
-      <Main
-        pad={{
-          horizontal: "large",
-        }}
-        style={{ height: "calc(100dvh - 72px)" }}
+      <Box
+        as="main"
+        px={{ base: 4, md: 8 }}
+        pb={{ base: "80px", md: 0 }}
+        minH="calc(100dvh - 72px)"
       >
-        <PageHeader
-          title={
-            <Box direction="row" align="center" gap="small">
-              <Heading size="medium">Add Financial Drama</Heading>
+        <Container maxW="container.md" py={8}>
+          <VStack align="start" gap={6}>
+            <Heading as="h1" size="lg">
+              Add Financial Drama
+            </Heading>
+            <Box width="100%">
+              <AddFinancialDramaForm userId={userId} />
             </Box>
-          }
-        />
-        <Box>
-          <AddFinancialDramaForm userId={session.user.id} />
-        </Box>
-      </Main>
+          </VStack>
+        </Container>
+      </Box>
       <BottomNav />
     </>
   );

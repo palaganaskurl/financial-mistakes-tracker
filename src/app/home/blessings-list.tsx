@@ -1,12 +1,12 @@
 import { BlessingCategoryToLabelMap } from "@/constants";
-import { getDb } from "@/db/postgres";
+import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { Box, Grid } from "grommet";
+import { Stack, Text, Flex, Box } from "@chakra-ui/react";
 import React from "react";
 
 export default async function BlessingsList() {
-  const db = getDb();
+  const db = await getDb();
   const blessings = await db
     .select()
     .from(financialDramaTable)
@@ -15,29 +15,34 @@ export default async function BlessingsList() {
     .limit(5);
 
   return (
-    <Grid
-      columns={{
-        count: 3,
-        size: "auto",
-      }}
-      gap="small"
-    >
-      {blessings.map((blessing) => (
-        <React.Fragment key={blessing.id.toString()}>
-          <Box>{BlessingCategoryToLabelMap[blessing.category]}</Box>
-          <Box align="end">
+    <Stack gap={3}>
+      {blessings.map((blessing: any) => (
+        <Flex
+          key={blessing.id.toString()}
+          justify="space-between"
+          align="center"
+          p={3}
+          borderWidth="1px"
+          borderRadius="md"
+          borderColor="gray.200"
+          _hover={{ bg: "gray.50" }}
+        >
+          <Text fontSize="sm" flex={1}>
+            {BlessingCategoryToLabelMap[blessing.category]}
+          </Text>
+          <Text fontSize="sm" textAlign="right" flex={1}>
             {new Intl.DateTimeFormat("en-PH", {
               dateStyle: "medium",
             }).format(blessing.date)}
-          </Box>
-          <Box align="end">
+          </Text>
+          <Text fontSize="sm" fontWeight="medium" textAlign="right" flex={1}>
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
             }).format(blessing.amount)}
-          </Box>
-        </React.Fragment>
+          </Text>
+        </Flex>
       ))}
-    </Grid>
+    </Stack>
   );
 }

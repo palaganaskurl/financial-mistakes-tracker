@@ -1,11 +1,16 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 
-export default defineConfig({
+const d1Config = defineConfig({
   out: "./drizzle",
   schema: ["./src/db/schema.ts", "./src/db/auth-schema.ts"],
-  dialect: "postgresql",
+  dialect: "sqlite",
+  driver: "d1-http",
   dbCredentials: {
-    url: process.env.POSTGRES_URL!,
+    accountId: process.env.CLOUDFLARE_ACCOUNT_ID!,
+    databaseId: process.env.CLOUDFLARE_DATABASE_ID!,
+    token: process.env.CLOUDFLARE_D1_TOKEN!,
   },
 });
+
+export default d1Config;

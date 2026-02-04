@@ -1,17 +1,12 @@
-// import { drizzle } from "drizzle-orm/d1";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { drizzle } from "drizzle-orm/d1";
+import { schema } from "@/db/schema";
 
-// export interface Env {
-//   FINANCIAL_MISTAKES_TRACKER_D1: D1Database;
-//   FINANCIAL_MISTAKES_TRACKER_D1_DEV: D1Database;
-// }
+export const getDb = async () => {
+  const { env } = await getCloudflareContext({ async: true });
 
-// // export default {
-// //   async fetch(request: Request, env: Env) {
-// //     const db = env.FINANCIAL_MISTAKES_TRACKER_D1
-// //       ? drizzle(env.FINANCIAL_MISTAKES_TRACKER_D1)
-// //       : drizzle(env.FINANCIAL_MISTAKES_TRACKER_D1_DEV);
-// //     // const result = await db.select().from(users).all();
-
-// //     // return Response.json(result);
-// //   },
-// // };
+  return drizzle(env.FINANCIAL_MISTAKES_TRACKER_D1, {
+    schema: schema,
+    logger: process.env.NODE_ENV === "development",
+  });
+};

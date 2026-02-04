@@ -1,26 +1,26 @@
-import { getDb } from "@/db/postgres";
+import { getDb } from "@/db/d1";
 import { sql } from "drizzle-orm";
-import { Card, CardBody, CardHeader } from "grommet";
+import { Box, Text } from "@chakra-ui/react";
 
 export default async function CurrentBalance() {
-  const db = getDb();
+  const db = await getDb();
 
-  const rows = await db
-    .execute(
-      sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date <= NOW()`
-    )
-    .then((result) => result.rows as { balance: number | null }[]);
-  const currentBalance = rows[0]?.balance ?? 0;
+  const rows = (await db.run(
+    sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date <= datetime('now')`,
+  )) as { results?: Array<{ balance: number }> };
+  const currentBalance = (rows.results?.[0]?.balance as number) ?? 0;
 
   return (
-    <Card>
-      <CardHeader pad="medium">Balance</CardHeader>
-      <CardBody pad="medium">
+    <Box borderWidth="1px" borderRadius="lg" p={4} borderColor="gray.200">
+      <Text fontSize="sm" fontWeight="medium" mb={2}>
+        Balance
+      </Text>
+      <Text fontSize="lg" fontWeight="bold">
         {new Intl.NumberFormat("en-PH", {
           style: "currency",
           currency: "PHP",
         }).format(currentBalance)}
-      </CardBody>
-    </Card>
+      </Text>
+    </Box>
   );
 }

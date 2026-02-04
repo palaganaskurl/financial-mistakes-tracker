@@ -1,23 +1,13 @@
 import BottomNav from "@/components/custom/bottom-nav";
 import MistakesList from "./mistakes-list";
-import {
-  Main,
-  PageHeader,
-  Heading,
-  Box,
-  Card,
-  CardHeader,
-  CardBody,
-  Text,
-} from "grommet";
-import { Schedule } from "grommet-icons";
 import { Suspense } from "react";
 import CurrentBalance from "./current-balance";
 import FinancialDramaSkeleton from "./financial-drama-skeleton";
 import BlessingsList from "./blessings-list";
+import { Box, Container, Heading, Stack, Text, Flex } from "@chakra-ui/react";
+import { IoCalendarOutline } from "react-icons/io5";
+import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 
 const STARTING_BALANCE = {
   amount: 100000,
@@ -26,12 +16,10 @@ const STARTING_BALANCE = {
 };
 
 export default async function HomePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
-  if (!session) {
-    redirect("/sign-in");
+  if (!session.isLoggedIn) {
+    redirect("/");
   }
 
   const currentDate = new Date();
@@ -40,70 +28,77 @@ export default async function HomePage() {
 
   return (
     <>
-      <Main
-        pad={{
-          horizontal: "large",
-          bottom: "large",
-        }}
-        style={{ height: "calc(100dvh - 72px)" }}
+      <Container
+        maxW="full"
+        px={{ base: 4, md: 6 }}
+        pb={{ base: 20, md: 6 }}
+        h="calc(100dvh - 72px)"
+        overflowY="auto"
       >
-        <PageHeader
-          title={
-            <Box direction="row" align="center" gap="medium">
-              <Schedule size="large" color="black" />
-              <Heading size="medium">
-                {currentMonth} {currentYear}
-              </Heading>
+        <Stack gap={6} py={6}>
+          <Flex align="center" gap={3}>
+            <IoCalendarOutline size={24} />
+            <Heading as="h1" size="lg">
+              {currentMonth} {currentYear}
+            </Heading>
+          </Flex>
+          <Stack gap={4}>
+            <CurrentBalance />
+            <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              p={4}
+              borderColor="gray.200"
+            >
+              <Text fontSize="sm" fontWeight="medium" mb={2}>
+                Forecasted Balance From Mistakes By Date
+              </Text>
+              <Text fontSize="lg" fontWeight="bold">
+                {new Intl.NumberFormat("en-PH", {
+                  style: "currency",
+                  currency: STARTING_BALANCE.currency,
+                }).format(STARTING_BALANCE.amount)}
+              </Text>
             </Box>
-          }
-        />
-        <Box gap="medium">
-          <CurrentBalance />
-          <Card>
-            <CardHeader pad="medium">
-              Forecasted Balance From Mistakes By Date
-            </CardHeader>
-            <CardBody pad="medium">
-              {new Intl.NumberFormat("en-PH", {
-                style: "currency",
-                currency: STARTING_BALANCE.currency,
-              }).format(STARTING_BALANCE.amount)}
-            </CardBody>
-          </Card>
-        </Box>
-        <Box
-          margin={{ top: "large" }}
-          direction="row"
-          align="center"
-          justify="between"
-        >
-          <Heading margin="none" size="small">
-            Recent Mistakes
-          </Heading>
-          <Text>View All</Text>
-        </Box>
-        <Box margin={{ top: "large" }}>
-          <Suspense fallback={<FinancialDramaSkeleton />}>
-            <MistakesList />
-          </Suspense>
-        </Box>
-        <Box
-          margin={{ top: "large" }}
-          direction="row"
-          align="center"
-          justify="between"
-        >
-          <Heading margin="none" size="small">
-            Recent Blessings
-          </Heading>
-          <Text>View All</Text>
-        </Box>
-        <Box margin={{ top: "large" }}>
-          <Suspense fallback={<FinancialDramaSkeleton />}>
-            <BlessingsList />
-          </Suspense>
-        </Box>
-      </Main>
+          </Stack>
+
+          <Stack gap={4} mt={6}>
+            <Flex justify="space-between" align="center">
+              <Heading as="h2" size="md">
+                Recent Mistakes
+              </Heading>
+              <Text
+                fontSize="sm"
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
+              >
+                View All
+              </Text>
+            </Flex>
+            <Suspense fallback={<FinancialDramaSkeleton />}>
+              <MistakesList />
+            </Suspense>
+          </Stack>
+
+          <Stack gap={4} mt={6}>
+            <Flex justify="space-between" align="center">
+              <Heading as="h2" size="md">
+                Recent Blessings
+              </Heading>
+              <Text
+                fontSize="sm"
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
+              >
+                View All
+              </Text>
+            </Flex>
+            <Suspense fallback={<FinancialDramaSkeleton />}>
+              <BlessingsList />
+            </Suspense>
+          </Stack>
+        </Stack>
+      </Container>
       <BottomNav />
     </>
   );

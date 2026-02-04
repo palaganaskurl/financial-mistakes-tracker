@@ -1,51 +1,24 @@
-import {
-  BlessingCategoriesValues,
-  FinancialDramaTypes,
-  MistakeCategoriesValues,
-} from "@/constants";
-import {
-  integer,
-  pgTable,
-  timestamp,
-  pgEnum,
-  boolean,
-  varchar,
-  decimal,
-  text,
-} from "drizzle-orm/pg-core";
-import { user } from "./auth-schema";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import * as authSchema from "./auth-schema";
 
-// TODO: Check if there's a way to validate the enum
-//  depending on the type of financial drama
-export const categoryEnum = pgEnum("category", [
-  ...MistakeCategoriesValues,
-  ...BlessingCategoriesValues,
-] as [string, ...string[]]);
-
-export const financialDramaTypeEnum = pgEnum("type", FinancialDramaTypes);
-
-export const financialDramaTable = pgTable("financialDrama", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  type: financialDramaTypeEnum().notNull(),
-  amount: decimal({
-    mode: "number",
-  }).notNull(),
-  date: timestamp({
-    precision: 6,
-    withTimezone: true,
-  }).notNull(),
-  category: categoryEnum().notNull(),
-  is_planned: boolean().default(true).notNull(),
-  notes: varchar(),
-  date_created: timestamp({
-    precision: 6,
-    withTimezone: true,
-  }).defaultNow(),
-  date_updated: timestamp({
-    precision: 6,
-    withTimezone: true,
-  }).defaultNow(),
+export const financialDramaTable = sqliteTable("financialDrama", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  type: text().notNull(),
+  amount: text().notNull(),
+  date: text().notNull(),
+  category: text().notNull(),
+  is_planned: integer({ mode: "boolean" }).default(true).notNull(),
+  notes: text(),
+  date_created: integer({ mode: "timestamp" })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  date_updated: integer({ mode: "timestamp" }).$defaultFn(() => new Date()),
   user_id: text("user_id")
-    .references(() => user.id, { onDelete: "cascade" })
+    .references(() => authSchema.user.id, { onDelete: "cascade" })
     .notNull(),
 });
+
+export const schema = {
+  ...authSchema,
+  ...financialDramaTable,
+} as const;
