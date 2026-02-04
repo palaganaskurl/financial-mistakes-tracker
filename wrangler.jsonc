@@ -23,4 +23,28 @@
       "migrations_dir": "drizzle/",
     },
   ],
+  "env": {
+    "development": {
+      "name": "financial-mistakes-tracker",
+      "d1_databases": [
+        {
+          "binding": "FINANCIAL_MISTAKES_TRACKER_D1",
+          "database_name": "financial-mistakes-tracker-d1-dev",
+          "database_id": "fa31127f-f00c-43fd-a9b0-9da0325163a4",
+          "migrations_dir": "drizzle/",
+        },
+      ],
+    },
+    "production": {
+      "name": "financial-mistakes-tracker",
+      "d1_databases": [
+        {
+          "binding": "FINANCIAL_MISTAKES_TRACKER_D1",
+          "database_name": "financial-mistakes-tracker-d1",
+          "database_id": "17b336a9-93c2-4c39-840b-d3a8690d49d6",
+          "migrations_dir": "drizzle/",
+        },
+      ],
+    },
+  },
 }
