@@ -13,10 +13,10 @@ export const MistakeCategories = [
   { label: "Miscellaneous", value: "miscellaneous" },
 ];
 export const MistakeCategoriesValues = MistakeCategories.map(
-  (category) => category.value
+  (category) => category.value,
 );
 export const MistakeCategoryToLabelMap = Object.fromEntries(
-  MistakeCategories.map((category) => [category.value, category.label])
+  MistakeCategories.map((category) => [category.value, category.label]),
 );
 export const BlessingCategories = [
   { label: "Salary", value: "salary" },
@@ -33,10 +33,10 @@ export const BlessingCategories = [
   { label: "Other", value: "other" },
 ];
 export const BlessingCategoriesValues = BlessingCategories.map(
-  (category) => category.value
+  (category) => category.value,
 );
 export const BlessingCategoryToLabelMap = Object.fromEntries(
-  BlessingCategories.map((category) => [category.value, category.label])
+  BlessingCategories.map((category) => [category.value, category.label]),
 );
 
 export const FinancialDramaTypes = ["mistake", "blessing"] as const;
@@ -49,26 +49,44 @@ export const FinancialDramaFormSchema = z
       message: "Amount must be greater than 0.",
     }),
     date: z.date({
-      message: "A date is required.",
+      message: "Date is required.",
     }),
-    category: z.string({ message: "Please select a category." }),
+    category: z
+      .string({ message: "Please select a category." })
+      .array()
+      .nonempty({ message: "Please select a category." }),
     is_planned: z.boolean().default(true).optional(),
     notes: z.coerce.string().optional(),
     user_id: z.string().nonempty({ message: "User ID is required." }),
+    blessings_account_id: z.coerce
+      .string({
+        message: "Please select an account.",
+      })
+      .array()
+      .optional(),
   })
   .superRefine((data, ctx) => {
     const validCategories: string[] =
       data.type === "mistake"
         ? MistakeCategories.map((c) => c.value)
         : data.type === "blessing"
-        ? BlessingCategories.map((c) => c.value)
-        : [];
+          ? BlessingCategories.map((c) => c.value)
+          : [];
 
-    if (!validCategories.includes(data.category)) {
+    if (!data.category.every((cat) => validCategories.includes(cat))) {
       ctx.addIssue({
         path: ["category"],
         code: "custom",
         message: `Invalid category for type "${data.type}".`,
+      });
+    }
+
+    // Require blessings_account_id when type is blessing
+    if (data.type === "blessing" && !data.blessings_account_id) {
+      ctx.addIssue({
+        path: ["blessings_account_id"],
+        code: "custom",
+        message: "Please select an account for blessings.",
       });
     }
   });

@@ -3,6 +3,9 @@ import BottomNav from "@/components/custom/bottom-nav";
 import { Box, Heading, Container, VStack } from "@chakra-ui/react";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { getDb } from "@/db/d1";
+import { accountsTable } from "@/db/accounts-schema";
+import { eq } from "drizzle-orm";
 
 /**
  * TODOs:
@@ -18,6 +21,12 @@ export default async function AddFinancialDramaPage() {
 
   const userId = session.userId!;
 
+  const db = await getDb();
+  const accounts = await db
+    .select()
+    .from(accountsTable)
+    .where(eq(accountsTable.user_id, userId));
+
   return (
     <>
       <Box
@@ -32,7 +41,7 @@ export default async function AddFinancialDramaPage() {
               Add Financial Drama
             </Heading>
             <Box width="100%">
-              <AddFinancialDramaForm userId={userId} />
+              <AddFinancialDramaForm userId={userId} accounts={accounts} />
             </Box>
           </VStack>
         </Container>

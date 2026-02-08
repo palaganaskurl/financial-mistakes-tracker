@@ -4,9 +4,9 @@ import { getIronSession, IronSession, SessionOptions } from "iron-session";
 import { cookies } from "next/headers";
 
 export interface SessionData {
-  userId?: string;
-  email?: string;
-  name?: string;
+  userId: string;
+  email: string;
+  name: string;
   isLoggedIn: boolean;
 }
 

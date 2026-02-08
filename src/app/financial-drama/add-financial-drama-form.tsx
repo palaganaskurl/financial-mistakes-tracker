@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 import addMistake from "@/actions/add-mistake";
 import {
   MistakeCategories,
@@ -21,21 +21,36 @@ import {
   Field,
   RadioGroup,
   Checkbox,
-  NativeSelect,
+  Select,
+  createListCollection,
+  Portal,
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import { AccountsTypesMap } from "@/constants/accounts";
+import { accountsTable } from "@/db/accounts-schema";
 
-export default function AddFinancialDramaForm({ userId }: { userId: string }) {
+type Accounts = Array<
+  Pick<typeof accountsTable.$inferSelect, "id" | "name" | "type">
+>;
+
+export default function AddFinancialDramaForm({
+  userId,
+  accounts,
+}: {
+  userId: string;
+  accounts: Accounts;
+}) {
   const { register, handleSubmit, watch, formState, control } = useForm<
     z.infer<typeof FinancialDramaFormSchema>
   >({
-    resolver: zodResolver(FinancialDramaFormSchema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    resolver: standardSchemaResolver(FinancialDramaFormSchema),
     defaultValues: {
       type: "mistake",
       amount: 0,
       date: new Date(),
       is_planned: true,
       notes: "",
+      category: [],
       user_id: userId,
     },
   });
@@ -69,9 +84,24 @@ export default function AddFinancialDramaForm({ userId }: { userId: string }) {
     }
   }
 
+  const mistakeCategoriesCollection = createListCollection({
+    items: MistakeCategories,
+  });
+  const blessingCategoriesCollection = createListCollection({
+    items: BlessingCategories,
+  });
+  const accountsCollection = createListCollection({
+    items: accounts.map((account) => ({
+      label: `${account.name} - ${AccountsTypesMap[account.type as keyof typeof AccountsTypesMap]}`,
+      value: account.id.toString(),
+    })),
+  });
+
   const currentType = watch("type");
   const categories =
-    currentType === "mistake" ? MistakeCategories : BlessingCategories;
+    currentType === "mistake"
+      ? mistakeCategoriesCollection
+      : blessingCategoriesCollection;
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -145,26 +175,83 @@ export default function AddFinancialDramaForm({ userId }: { userId: string }) {
           render={({ field }) => (
             <Field.Root invalid={!!formState.errors.category}>
               <Field.Label>Category</Field.Label>
-              <NativeSelect.Root>
-                <NativeSelect.Field
-                  placeholder="Select category"
-                  value={field.value}
-                  onChange={(e) => field.onChange(e.target.value)}
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </NativeSelect.Field>
-                <NativeSelect.Indicator />
-              </NativeSelect.Root>
+              <Select.Root
+                name={field.name}
+                value={field.value}
+                onValueChange={({ value }) => field.onChange(value)}
+                onInteractOutside={() => field.onBlur()}
+                collection={categories}
+              >
+                <Select.HiddenSelect />
+                <Select.Control>
+                  <Select.Trigger>
+                    <Select.ValueText placeholder="Select Category" />
+                  </Select.Trigger>
+                  <Select.IndicatorGroup>
+                    <Select.Indicator />
+                  </Select.IndicatorGroup>
+                </Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content>
+                      {categories.items.map((cat) => (
+                        <Select.Item key={cat.value} item={cat.value}>
+                          {cat.label}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
               <Field.ErrorText>
                 {formState.errors.category?.message}
               </Field.ErrorText>
             </Field.Root>
           )}
         />
+
+        {currentType === "blessing" && (
+          <Controller
+            name="blessings_account_id"
+            control={control}
+            render={({ field }) => (
+              <Field.Root invalid={!!formState.errors.blessings_account_id}>
+                <Field.Label>Account</Field.Label>
+                <Select.Root
+                  name={field.name}
+                  value={field.value ?? []}
+                  onValueChange={({ value }) => field.onChange(value)}
+                  onInteractOutside={() => field.onBlur()}
+                  collection={accountsCollection}
+                >
+                  <Select.HiddenSelect />
+                  <Select.Control>
+                    <Select.Trigger>
+                      <Select.ValueText placeholder="Select Account" />
+                    </Select.Trigger>
+                    <Select.IndicatorGroup>
+                      <Select.Indicator />
+                    </Select.IndicatorGroup>
+                  </Select.Control>
+                  <Portal>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {accountsCollection.items.map((account) => (
+                          <Select.Item key={account.value} item={account.value}>
+                            {account.label}
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Portal>
+                </Select.Root>
+                <Field.ErrorText>
+                  {formState.errors.blessings_account_id?.message}
+                </Field.ErrorText>
+              </Field.Root>
+            )}
+          />
+        )}
 
         <Controller
           name="is_planned"
