@@ -7,7 +7,7 @@ export default async function CurrentBalance() {
   const db = await getDb();
 
   const rows = (await db.run(
-    sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date <= datetime('now')`,
+    sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date(date) = date('now')`,
   )) as { results?: Array<{ balance: number }> };
   const currentBalance = (rows.results?.[0]?.balance as number) ?? 0;
 

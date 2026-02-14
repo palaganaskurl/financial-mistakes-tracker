@@ -8,6 +8,7 @@ import { Box, Container, Heading, Stack, Text, Flex } from "@chakra-ui/react";
 import { IoCalendarOutline } from "react-icons/io5";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 const STARTING_BALANCE = {
   amount: 100000,
@@ -67,13 +68,15 @@ export default async function HomePage() {
               <Heading as="h2" size="md">
                 Recent Mistakes
               </Heading>
-              <Text
-                fontSize="sm"
-                cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
-              >
-                View All
-              </Text>
+              <Link href="/home/mistakes">
+                <Text
+                  fontSize="sm"
+                  cursor="pointer"
+                  _hover={{ textDecoration: "underline" }}
+                >
+                  View All
+                </Text>
+              </Link>
             </Flex>
             <Suspense fallback={<FinancialDramaSkeleton />}>
               <MistakesList />
@@ -85,13 +88,15 @@ export default async function HomePage() {
               <Heading as="h2" size="md">
                 Recent Blessings
               </Heading>
-              <Text
-                fontSize="sm"
-                cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
-              >
-                View All
-              </Text>
+              <Link href="/home/blessings">
+                <Text
+                  fontSize="sm"
+                  cursor="pointer"
+                  _hover={{ textDecoration: "underline" }}
+                >
+                  View All
+                </Text>
+              </Link>
             </Flex>
             <Suspense fallback={<FinancialDramaSkeleton />}>
               <BlessingsList />

@@ -1,2 +1,6 @@
 - For CSS Framework, we are using https://chakra-ui.com/llms-full.txt.
 - Prioritize mobile first.
+- Database is using D1 Cloudflare SQL.
+- Always consider light and dark mode on colors / CSS / styling.
+- Stop adding too much comments.
+- For DatePicker, we are using https://www.npmjs.com/package/chakra-dayzed-datepicker

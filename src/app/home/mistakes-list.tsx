@@ -25,7 +25,7 @@ export default async function MistakesList() {
           borderWidth="1px"
           borderRadius="md"
           borderColor="gray.200"
-          _hover={{ bg: "gray.50" }}
+          _hover={{ bg: "gray.100", _dark: { bg: "gray.700" } }}
         >
           <Text fontSize="sm" flex={1}>
             {MistakeCategoryToLabelMap[mistake.category]}

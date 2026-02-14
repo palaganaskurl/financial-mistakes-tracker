@@ -27,6 +27,7 @@
     "@emotion/react": "^11.14.0",
     "@hookform/resolvers": "^5.1.0",
     "@opennextjs/cloudflare": "^1.6.5",
+    "chakra-dayzed-datepicker": "^3.0.0",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.4",
     "iron-session": "^8.0.4",
