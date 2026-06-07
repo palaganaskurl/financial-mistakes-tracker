@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { desc, eq, sql } from "drizzle-orm";
-import { Calendar } from "lucide-react";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 import BlessingsList from "./-blessings-list";
@@ -57,20 +56,25 @@ function HomePage() {
   return (
     <div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
       <div className="flex flex-col gap-6 py-6">
-        <div className="flex items-center gap-3">
-          <Calendar size={24} />
-          <h1 className="text-2xl font-bold">
-            {currentMonth} {currentYear}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
+            Financial Journal
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {currentMonth}{" "}
+            <span className="text-muted-foreground font-normal text-2xl">
+              {currentYear}
+            </span>
           </h1>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <CurrentBalance balance={balance} />
-          <div className="border rounded-lg p-4 border-gray-200">
-            <p className="text-sm font-medium mb-2">
-              Forecasted Balance From Mistakes By Date
+          <div className="flex-1 rounded-xl border border-border p-4">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+              Forecasted
             </p>
-            <p className="text-lg font-bold">
+            <p className="text-xl font-bold text-foreground">
               {new Intl.NumberFormat("en-PH", {
                 style: "currency",
                 currency: STARTING_BALANCE.currency,
@@ -79,12 +83,14 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 mt-6">
+        <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Recent Mistakes</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Recent Mistakes
+            </h2>
             <Link
               to="/home/mistakes"
-              className="text-sm hover:underline cursor-pointer"
+              className="text-xs text-primary hover:underline"
             >
               View All
             </Link>
@@ -92,12 +98,14 @@ function HomePage() {
           <MistakesList mistakes={mistakes} />
         </div>
 
-        <div className="flex flex-col gap-4 mt-6">
+        <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Recent Blessings</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Recent Blessings
+            </h2>
             <Link
               to="/home/blessings"
-              className="text-sm hover:underline cursor-pointer"
+              className="text-xs text-primary hover:underline"
             >
               View All
             </Link>

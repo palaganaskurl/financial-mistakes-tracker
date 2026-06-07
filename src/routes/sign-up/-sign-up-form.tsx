@@ -56,7 +56,7 @@ export function SignUpForm() {
         <Input
           id="username"
           type="text"
-          placeholder="johndoe"
+          placeholder="Username"
           {...register("username")}
           className={formState.errors.username ? "border-red-500" : ""}
         />
@@ -74,7 +74,7 @@ export function SignUpForm() {
         <Input
           id="name"
           type="text"
-          placeholder="John Doe"
+          placeholder="Full name"
           {...register("name")}
           className={formState.errors.name ? "border-red-500" : ""}
         />

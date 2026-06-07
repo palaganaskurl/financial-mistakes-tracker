@@ -5,11 +5,17 @@ interface CurrentBalanceProps {
 }
 
 export default function CurrentBalance({ balance }: CurrentBalanceProps) {
+  const isPositive = balance >= 0;
+
   return (
-    <Link to="/home/accounts">
-      <div className="border rounded-lg p-4 border-gray-200 cursor-pointer transition-all hover:border-blue-400 hover:shadow-[0_0_0_3px_rgba(66,153,225,0.1)]">
-        <p className="text-sm font-medium mb-2">Balance</p>
-        <p className="text-lg font-bold">
+    <Link to="/home/accounts" className="flex-1">
+      <div className="rounded-xl border border-border p-4 cursor-pointer hover:border-primary/40 hover:bg-accent/30 transition-all">
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+          Today
+        </p>
+        <p
+          className={`text-xl font-bold ${isPositive ? "text-primary" : "text-destructive"}`}
+        >
           {new Intl.NumberFormat("en-PH", {
             style: "currency",
             currency: "PHP",

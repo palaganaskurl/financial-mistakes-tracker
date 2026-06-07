@@ -54,7 +54,7 @@ export function SignInForm() {
         <Input
           id="username"
           type="text"
-          placeholder="johndoe"
+          placeholder="Username"
           {...register("username")}
           className={formState.errors.username ? "border-red-500" : ""}
         />

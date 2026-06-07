@@ -3,14 +3,14 @@ import { Home, Plus, Wallet } from "lucide-react";
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-[72px] bg-white border-t border-gray-200 flex items-center justify-around px-6 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 h-[72px] bg-card border-t border-border flex items-center justify-around px-6 z-50">
       <Link
         to="/home"
         activeOptions={{ exact: true }}
-        className="flex flex-col items-center gap-1 text-gray-400 [&.active]:text-black transition-colors"
+        className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
         activeProps={{
           className:
-            "flex flex-col items-center gap-1 text-black transition-colors active",
+            "flex flex-col items-center gap-1 text-primary transition-colors active",
         }}
       >
         <Home size={22} />
@@ -19,18 +19,18 @@ export function BottomNav() {
 
       <Link
         to="/financial-drama"
-        className="flex items-center justify-center w-16 h-16 rounded-full bg-black text-white shadow-xl -translate-y-5 active:scale-95 transition-transform ring-4 ring-white"
+        className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-xl shadow-primary/25 -translate-y-5 active:scale-95 transition-transform ring-4 ring-card"
         aria-label="Add"
       >
-        <Plus size={28} />
+        <Plus size={26} />
       </Link>
 
       <Link
         to="/home/accounts"
-        className="flex flex-col items-center gap-1 text-gray-400 [&.active]:text-black transition-colors"
+        className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
         activeProps={{
           className:
-            "flex flex-col items-center gap-1 text-black transition-colors active",
+            "flex flex-col items-center gap-1 text-primary transition-colors active",
         }}
       >
         <Wallet size={22} />

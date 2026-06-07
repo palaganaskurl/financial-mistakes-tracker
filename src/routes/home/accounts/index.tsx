@@ -49,9 +49,11 @@ function AccountsPage() {
           <h1 className="text-2xl font-bold">Accounts</h1>
         </div>
 
-        <div className="border rounded-lg p-4 border-gray-200">
-          <p className="text-sm font-medium mb-2">Total Balance</p>
-          <p className="text-2xl font-bold">
+        <div className="rounded-xl border border-border p-4">
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+            Total Balance
+          </p>
+          <p className="text-2xl font-bold text-primary">
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
@@ -60,21 +62,23 @@ function AccountsPage() {
         </div>
 
         {accounts.length > 0 && (
-          <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold">Your Accounts</p>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Your Accounts
+            </p>
             {accounts.map((account) => (
               <div
                 key={account.id}
-                className="border rounded-lg p-4 border-gray-200"
+                className="rounded-xl border border-border p-4 bg-card"
               >
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex justify-between items-center">
                   <div className="flex flex-col">
                     <p className="font-semibold">{account.name}</p>
-                    <p className="text-sm text-gray-600 capitalize">
+                    <p className="text-xs text-muted-foreground capitalize">
                       {account.type.replace("_", " ")}
                     </p>
                   </div>
-                  <p className="font-bold">
+                  <p className="font-bold text-primary">
                     {new Intl.NumberFormat("en-PH", {
                       style: "currency",
                       currency: account.currency,
@@ -86,8 +90,10 @@ function AccountsPage() {
           </div>
         )}
 
-        <div className="border rounded-lg p-4 border-gray-200">
-          <p className="text-sm font-semibold mb-4">Add New Account</p>
+        <div className="rounded-xl border border-border p-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+            Add New Account
+          </p>
           <AddAccountForm />
         </div>
       </div>

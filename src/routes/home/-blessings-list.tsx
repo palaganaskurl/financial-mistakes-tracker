@@ -8,22 +8,31 @@ interface BlessingsListProps {
 }
 
 export default function BlessingsList({ blessings }: BlessingsListProps) {
+  if (blessings.length === 0) {
+    return (
+      <div className="rounded-xl border border-border p-4 text-center text-muted-foreground text-sm">
+        No blessings logged yet.
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       {blessings.map((blessing) => (
         <div
           key={blessing.id}
-          className="flex justify-between items-center p-3 border rounded-md border-gray-200 hover:bg-gray-50"
+          className="flex justify-between items-center px-4 py-3 rounded-xl bg-card hover:bg-accent/40 transition-colors"
         >
-          <span className="text-sm flex-1">
+          <span className="text-sm flex-1 font-medium">
             {BlessingCategoryToLabelMap[blessing.category]}
           </span>
-          <span className="text-sm text-right flex-1">
+          <span className="text-xs text-muted-foreground flex-1 text-center">
             {new Intl.DateTimeFormat("en-PH", {
               dateStyle: "medium",
             }).format(new Date(blessing.date))}
           </span>
-          <span className="text-sm font-medium text-right flex-1">
+          <span className="text-sm font-semibold text-blessing text-right flex-1">
+            +
             {new Intl.NumberFormat("en-PH", {
               style: "currency",
               currency: "PHP",
