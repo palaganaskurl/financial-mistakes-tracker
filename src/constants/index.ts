@@ -57,7 +57,6 @@ export const FinancialDramaFormSchema = z
       .nonempty({ message: "Please select a category." }),
     is_planned: z.boolean().default(true).optional(),
     notes: z.coerce.string().optional(),
-    user_id: z.string().nonempty({ message: "User ID is required." }),
     blessings_account_id: z.coerce
       .string({
         message: "Please select an account.",

@@ -38,11 +38,12 @@ type Accounts = Array<
   Pick<typeof accountsTable.$inferSelect, "id" | "name" | "type">
 >;
 
+type FinancialDramaFormInput = z.input<typeof FinancialDramaFormSchema>;
+type FinancialDramaFormValues = z.output<typeof FinancialDramaFormSchema>;
+
 export default function AddFinancialDramaForm({
-  userId,
   accounts,
 }: {
-  userId: string;
   accounts: Accounts;
 }) {
   const navigate = useNavigate();
@@ -50,7 +51,9 @@ export default function AddFinancialDramaForm({
   const [mounted, setMounted] = useState(false);
 
   const { register, handleSubmit, watch, formState, control } = useForm<
-    z.infer<typeof FinancialDramaFormSchema>
+    FinancialDramaFormInput,
+    unknown,
+    FinancialDramaFormValues
   >({
     resolver: zodResolver(FinancialDramaFormSchema),
     defaultValues: {
@@ -60,7 +63,6 @@ export default function AddFinancialDramaForm({
       is_planned: true,
       notes: "",
       category: [],
-      user_id: userId,
     },
   });
 
@@ -72,7 +74,7 @@ export default function AddFinancialDramaForm({
     setMounted(true);
   }, []);
 
-  async function onSubmit(values: z.infer<typeof FinancialDramaFormSchema>) {
+  async function onSubmit(values: FinancialDramaFormValues) {
     console.log("Submitting form with values:", values);
     setPending(true);
     try {
@@ -87,7 +89,6 @@ export default function AddFinancialDramaForm({
           category: values.category[0],
           is_planned: values.is_planned ?? true,
           notes: values.notes,
-          user_id: values.user_id,
           blessings_account_id: values.blessings_account_id?.[0],
         },
       });
@@ -153,6 +154,7 @@ export default function AddFinancialDramaForm({
                   <PopoverTrigger
                     render={
                       <Button
+                        type="button"
                         variant="outline"
                         data-empty={!field.value}
                         className="justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
@@ -204,7 +206,7 @@ export default function AddFinancialDramaForm({
                   value={field.value?.[0] ?? ""}
                   onValueChange={(val) => field.onChange([val])}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger type="button" className="w-full">
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -235,7 +237,7 @@ export default function AddFinancialDramaForm({
                     value={field.value?.[0] ?? ""}
                     onValueChange={(val) => field.onChange([val])}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger type="button" className="w-full">
                       <SelectValue placeholder="Select Account" />
                     </SelectTrigger>
                     <SelectContent>
@@ -272,7 +274,9 @@ export default function AddFinancialDramaForm({
                 <Checkbox
                   id="is-planned"
                   checked={field.value ?? true}
-                  onCheckedChange={(checked) => field.onChange(checked)}
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
                 />
               )}
             />

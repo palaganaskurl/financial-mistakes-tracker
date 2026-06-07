@@ -11,7 +11,7 @@ const loadEnv = async () => {
   if (env !== null) return env;
   try {
     const imported = await import("cloudflare:workers");
-    env = imported.env || {};
+    env = (imported.env || {}) as unknown as CloudflareEnv;
   } catch {
     env = {};
   }
