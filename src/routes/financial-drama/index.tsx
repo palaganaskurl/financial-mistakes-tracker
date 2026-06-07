@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
+import { BottomNav } from "@/components/bottom-nav";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { useAppSession } from "@/lib/session";
@@ -37,13 +38,16 @@ function AddFinancialDramaPage() {
   const { accounts } = Route.useLoaderData();
 
   return (
-    <main className="px-4 md:px-8 pb-20 md:pb-0 min-h-[calc(100dvh-72px)]">
-      <div className="max-w-2xl mx-auto py-8">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-2xl font-bold">Add Financial Drama</h1>
-          <AddFinancialDramaForm accounts={accounts} />
+    <>
+      <main className="px-4 md:px-8 pb-20 md:pb-0 min-h-[calc(100dvh-72px)]">
+        <div className="max-w-2xl mx-auto py-8">
+          <div className="flex flex-col gap-6">
+            <h1 className="text-2xl font-bold">Add Financial Drama</h1>
+            <AddFinancialDramaForm accounts={accounts} />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <BottomNav />
+    </>
   );
 }

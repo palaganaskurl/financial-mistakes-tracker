@@ -10,8 +10,8 @@ import { addMistake } from "@/actions/add-mistake";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MoneyInput } from "@/components/ui/money-input";
 import {
   Popover,
   PopoverContent,
@@ -131,11 +131,20 @@ export default function AddFinancialDramaForm({
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="amount">Amount</Label>
-            <Input
-              id="amount"
-              type="number"
-              placeholder="Enter amount"
-              {...register("amount", { valueAsNumber: true })}
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field }) => (
+                <MoneyInput
+                  id="amount"
+                  name={field.name}
+                  value={Number(field.value)}
+                  onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  aria-invalid={!!formState.errors.amount}
+                />
+              )}
             />
             {formState.errors.amount && (
               <p className="text-sm text-destructive">
