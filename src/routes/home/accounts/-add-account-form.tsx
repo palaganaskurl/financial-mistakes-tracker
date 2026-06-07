@@ -4,6 +4,7 @@ import { addAccount } from "@/actions/add-account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MoneyInput } from "@/components/ui/money-input";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,7 @@ export default function AddAccountForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [accountType, setAccountType] = useState<string>("");
+  const [balance, setBalance] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +27,6 @@ export default function AddAccountForm() {
     try {
       const formData = new FormData(e.currentTarget);
       const name = formData.get("name") as string;
-      const balance = Number(formData.get("balance"));
 
       await addAccount({
         data: {
@@ -66,9 +67,14 @@ export default function AddAccountForm() {
             onValueChange={(val) => setAccountType(val as string)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select type" />
+              <SelectValue placeholder="Select type">
+                {(value) =>
+                  AccountTypeItems.find((item) => item.value === value)
+                    ?.label ?? "Select type"
+                }
+              </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent alignItemWithTrigger={false}>
               {AccountTypeItems.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
@@ -82,12 +88,11 @@ export default function AddAccountForm() {
           <Label htmlFor="balance" className="mb-2 block">
             Starting Balance
           </Label>
-          <Input
+          <MoneyInput
             id="balance"
             name="balance"
-            type="number"
-            placeholder="0"
-            required
+            value={balance}
+            onValueChange={setBalance}
             disabled={isLoading}
           />
         </div>

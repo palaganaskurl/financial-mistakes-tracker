@@ -223,7 +223,7 @@ export default function AddFinancialDramaForm({
                       }
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent alignItemWithTrigger={false}>
                     {categories.map((cat) => (
                       <SelectItem key={cat.value} value={cat.value}>
                         {cat.label}
@@ -252,9 +252,14 @@ export default function AddFinancialDramaForm({
                     onValueChange={(val) => field.onChange([val])}
                   >
                     <SelectTrigger type="button" className="w-full">
-                      <SelectValue placeholder="Select Account" />
+                      <SelectValue placeholder="Select Account">
+                        {(value) =>
+                          accounts.find((a) => a.id.toString() === value)
+                            ?.name ?? "Select Account"
+                        }
+                      </SelectValue>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent alignItemWithTrigger={false}>
                       {accounts.map((account) => (
                         <SelectItem
                           key={account.id}
