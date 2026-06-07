@@ -5,6 +5,7 @@ import z from "zod";
 import { SignUpFormSchema } from "@/constants";
 import { user } from "@/db/auth-schema";
 import { getDb } from "@/db/d1";
+import { useAppSession } from "@/lib/session";
 
 export const signUp = createServerFn({ method: "POST" })
   .validator((data: unknown) => data as z.infer<typeof SignUpFormSchema>)
@@ -28,10 +29,20 @@ export const signUp = createServerFn({ method: "POST" })
         .update(values.password)
         .digest("hex");
 
-      await db.insert(user).values({
-        username: values.username,
-        name: values.name,
-        password: hashedPassword,
+      const [newUser] = await db
+        .insert(user)
+        .values({
+          username: values.username,
+          name: values.name,
+          password: hashedPassword,
+        })
+        .returning();
+
+      const session = await useAppSession();
+      await session.update({
+        userId: newUser.id,
+        username: newUser.username,
+        name: newUser.name,
       });
 
       return {

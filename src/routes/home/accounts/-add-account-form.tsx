@@ -32,8 +32,6 @@ export default function AddAccountForm() {
           name,
           type: accountType,
           balance,
-          // TODO: replace with actual userId from auth session
-          userId: "",
         },
       });
 

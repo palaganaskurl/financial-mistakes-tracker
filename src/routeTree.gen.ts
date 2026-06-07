@@ -9,13 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
+import { Route as FinancialDramaIndexRouteImport } from './routes/financial-drama/index'
 import { Route as HomeMistakesIndexRouteImport } from './routes/home/mistakes/index'
 import { Route as HomeBlessingsIndexRouteImport } from './routes/home/blessings/index'
 import { Route as HomeAccountsIndexRouteImport } from './routes/home/accounts/index'
 
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -27,28 +34,35 @@ const SignUpIndexRoute = SignUpIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeRoute,
+} as any)
+const FinancialDramaIndexRoute = FinancialDramaIndexRouteImport.update({
+  id: '/financial-drama/',
+  path: '/financial-drama/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeMistakesIndexRoute = HomeMistakesIndexRouteImport.update({
-  id: '/home/mistakes/',
-  path: '/home/mistakes/',
-  getParentRoute: () => rootRouteImport,
+  id: '/mistakes/',
+  path: '/mistakes/',
+  getParentRoute: () => HomeRoute,
 } as any)
 const HomeBlessingsIndexRoute = HomeBlessingsIndexRouteImport.update({
-  id: '/home/blessings/',
-  path: '/home/blessings/',
-  getParentRoute: () => rootRouteImport,
+  id: '/blessings/',
+  path: '/blessings/',
+  getParentRoute: () => HomeRoute,
 } as any)
 const HomeAccountsIndexRoute = HomeAccountsIndexRouteImport.update({
-  id: '/home/accounts/',
-  path: '/home/accounts/',
-  getParentRoute: () => rootRouteImport,
+  id: '/accounts/',
+  path: '/accounts/',
+  getParentRoute: () => HomeRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
+  '/financial-drama/': typeof FinancialDramaIndexRoute
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/home/accounts/': typeof HomeAccountsIndexRoute
@@ -57,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/financial-drama': typeof FinancialDramaIndexRoute
   '/home': typeof HomeIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/home/accounts': typeof HomeAccountsIndexRoute
@@ -66,6 +81,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
+  '/financial-drama/': typeof FinancialDramaIndexRoute
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/home/accounts/': typeof HomeAccountsIndexRoute
@@ -76,6 +93,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/home'
+    | '/financial-drama/'
     | '/home/'
     | '/sign-up/'
     | '/home/accounts/'
@@ -84,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/financial-drama'
     | '/home'
     | '/sign-up'
     | '/home/accounts'
@@ -92,6 +112,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/home'
+    | '/financial-drama/'
     | '/home/'
     | '/sign-up/'
     | '/home/accounts/'
@@ -101,15 +123,20 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HomeIndexRoute: typeof HomeIndexRoute
+  HomeRoute: typeof HomeRouteWithChildren
+  FinancialDramaIndexRoute: typeof FinancialDramaIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
-  HomeAccountsIndexRoute: typeof HomeAccountsIndexRoute
-  HomeBlessingsIndexRoute: typeof HomeBlessingsIndexRoute
-  HomeMistakesIndexRoute: typeof HomeMistakesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -126,42 +153,63 @@ declare module '@tanstack/react-router' {
     }
     '/home/': {
       id: '/home/'
-      path: '/home'
+      path: '/'
       fullPath: '/home/'
       preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/financial-drama/': {
+      id: '/financial-drama/'
+      path: '/financial-drama'
+      fullPath: '/financial-drama/'
+      preLoaderRoute: typeof FinancialDramaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/mistakes/': {
       id: '/home/mistakes/'
-      path: '/home/mistakes'
+      path: '/mistakes'
       fullPath: '/home/mistakes/'
       preLoaderRoute: typeof HomeMistakesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof HomeRoute
     }
     '/home/blessings/': {
       id: '/home/blessings/'
-      path: '/home/blessings'
+      path: '/blessings'
       fullPath: '/home/blessings/'
       preLoaderRoute: typeof HomeBlessingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof HomeRoute
     }
     '/home/accounts/': {
       id: '/home/accounts/'
-      path: '/home/accounts'
+      path: '/accounts'
       fullPath: '/home/accounts/'
       preLoaderRoute: typeof HomeAccountsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof HomeRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+interface HomeRouteChildren {
+  HomeIndexRoute: typeof HomeIndexRoute
+  HomeAccountsIndexRoute: typeof HomeAccountsIndexRoute
+  HomeBlessingsIndexRoute: typeof HomeBlessingsIndexRoute
+  HomeMistakesIndexRoute: typeof HomeMistakesIndexRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
   HomeIndexRoute: HomeIndexRoute,
-  SignUpIndexRoute: SignUpIndexRoute,
   HomeAccountsIndexRoute: HomeAccountsIndexRoute,
   HomeBlessingsIndexRoute: HomeBlessingsIndexRoute,
   HomeMistakesIndexRoute: HomeMistakesIndexRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  HomeRoute: HomeRouteWithChildren,
+  FinancialDramaIndexRoute: FinancialDramaIndexRoute,
+  SignUpIndexRoute: SignUpIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

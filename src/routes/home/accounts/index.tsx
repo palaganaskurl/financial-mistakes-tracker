@@ -1,16 +1,27 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { eq } from "drizzle-orm";
 import { ArrowLeft } from "lucide-react";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
+import { useAppSession } from "@/lib/session";
 import AddAccountForm from "./-add-account-form";
 
 const getAccountsData = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
+    const session = await useAppSession();
+
+    if (!session.data.userId) {
+      throw redirect({ to: "/" });
+    }
+
     const db = getDb(context);
-    // TODO: filter by session userId once auth is implemented
-    const accounts = await db.select().from(accountsTable);
+    const accounts = await db
+      .select()
+      .from(accountsTable)
+      .where(eq(accountsTable.user_id, session.data.userId));
     const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+
     return { accounts, totalBalance };
   },
 );
