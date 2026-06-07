@@ -23,7 +23,9 @@
     "wrangler-dev": "wrangler dev",
     "wrangler-types": "wrangler types",
     "wrangler-migrations": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --local",
-    "wrangler-migrations-remote": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote"
+    "wrangler-migrations-remote": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote",
+    "db:truncate": "wrangler d1 execute financial-mistakes-tracker-d1-dev --remote --file scripts/truncate.sql && wrangler d1 migrations apply financial-mistakes-tracker-d1-dev --remote",
+    "db:truncate:prod": "wrangler d1 execute financial-mistakes-tracker-d1 --remote --file scripts/truncate.sql && wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
