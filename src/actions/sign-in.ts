@@ -1,8 +1,8 @@
+import { createHash } from "node:crypto";
 import { createServerFn } from "@tanstack/react-start";
-import { createHash } from "crypto";
 import { eq } from "drizzle-orm";
-import z from "zod";
-import { SignInFormSchema } from "@/constants";
+import type z from "zod";
+import type { SignInFormSchema } from "@/constants";
 import { user } from "@/db/auth-schema";
 import { getDb } from "@/db/d1";
 import { useAppSession } from "@/lib/session";
@@ -13,6 +13,7 @@ export const signIn = createServerFn({ method: "POST" })
   .validator((data: unknown) => data as z.infer<typeof SignInFormSchema>)
   .handler(async ({ data: values, context }): Promise<SignInResult> => {
     const db = getDb(context);
+    const session = await useAppSession();
 
     try {
       const hashedPassword = createHash("sha256")
@@ -40,7 +41,6 @@ export const signIn = createServerFn({ method: "POST" })
         };
       }
 
-      const session = await useAppSession();
       await session.update({
         userId: foundUser.id,
         username: foundUser.username,

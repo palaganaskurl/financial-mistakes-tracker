@@ -216,7 +216,12 @@ export default function AddFinancialDramaForm({
                   onValueChange={(val) => field.onChange([val])}
                 >
                   <SelectTrigger type="button" className="w-full">
-                    <SelectValue placeholder="Select Category" />
+                    <SelectValue placeholder="Select Category">
+                      {(value) =>
+                        categories.find((cat) => cat.value === value)?.label ??
+                        "Select Category"
+                      }
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((cat) => (

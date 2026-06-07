@@ -1,8 +1,8 @@
+import { createHash } from "node:crypto";
 import { createServerFn } from "@tanstack/react-start";
-import { createHash } from "crypto";
 import { eq } from "drizzle-orm";
-import z from "zod";
-import { SignUpFormSchema } from "@/constants";
+import type z from "zod";
+import type { SignUpFormSchema } from "@/constants";
 import { user } from "@/db/auth-schema";
 import { getDb } from "@/db/d1";
 import { useAppSession } from "@/lib/session";
@@ -11,6 +11,7 @@ export const signUp = createServerFn({ method: "POST" })
   .validator((data: unknown) => data as z.infer<typeof SignUpFormSchema>)
   .handler(async ({ data: values, context }) => {
     const db = getDb(context);
+    const session = await useAppSession();
 
     try {
       const existingUser = await db
@@ -38,7 +39,6 @@ export const signUp = createServerFn({ method: "POST" })
         })
         .returning();
 
-      const session = await useAppSession();
       await session.update({
         userId: newUser.id,
         username: newUser.username,
