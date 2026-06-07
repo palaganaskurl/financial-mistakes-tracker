@@ -10,101 +10,101 @@ import FinancialDramaSkeleton from "./-financial-drama-skeleton";
 import MistakesList from "./-mistakes-list";
 
 const STARTING_BALANCE = {
-	amount: 100000,
-	currency: "PHP",
+  amount: 100000,
+  currency: "PHP",
 };
 
 const getHomeData = createServerFn({ method: "GET" }).handler(
-	async ({ context }) => {
-		const db = getDb(context);
+  async ({ context }) => {
+    const db = getDb(context);
 
-		const rows = (await db.run(
-			sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date(date) = date('now')`,
-		)) as { results?: Array<{ balance: number }> };
-		const balance = (rows.results?.[0]?.balance as number) ?? 0;
+    const rows = (await db.run(
+      sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date(date) = date('now')`,
+    )) as { results?: Array<{ balance: number }> };
+    const balance = (rows.results?.[0]?.balance as number) ?? 0;
 
-		const mistakes = await db
-			.select()
-			.from(financialDramaTable)
-			.where(eq(financialDramaTable.type, "mistake"))
-			.orderBy(desc(financialDramaTable.date))
-			.limit(5);
+    const mistakes = await db
+      .select()
+      .from(financialDramaTable)
+      .where(eq(financialDramaTable.type, "mistake"))
+      .orderBy(desc(financialDramaTable.date))
+      .limit(5);
 
-		const blessings = await db
-			.select()
-			.from(financialDramaTable)
-			.where(eq(financialDramaTable.type, "blessing"))
-			.orderBy(desc(financialDramaTable.date))
-			.limit(5);
+    const blessings = await db
+      .select()
+      .from(financialDramaTable)
+      .where(eq(financialDramaTable.type, "blessing"))
+      .orderBy(desc(financialDramaTable.date))
+      .limit(5);
 
-		return { balance, mistakes, blessings };
-	},
+    return { balance, mistakes, blessings };
+  },
 );
 
 export const Route = createFileRoute("/home/")({
-	loader: () => getHomeData(),
-	pendingComponent: FinancialDramaSkeleton,
-	component: HomePage,
+  loader: () => getHomeData(),
+  pendingComponent: FinancialDramaSkeleton,
+  component: HomePage,
 });
 
 function HomePage() {
-	const { balance, mistakes, blessings } = Route.useLoaderData();
+  const { balance, mistakes, blessings } = Route.useLoaderData();
 
-	const currentDate = new Date();
-	const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
-	const currentYear = currentDate.getFullYear();
+  const currentDate = new Date();
+  const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
+  const currentYear = currentDate.getFullYear();
 
-	return (
-		<div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
-			<div className="flex flex-col gap-6 py-6">
-				<div className="flex items-center gap-3">
-					<Calendar size={24} />
-					<h1 className="text-2xl font-bold">
-						{currentMonth} {currentYear}
-					</h1>
-				</div>
+  return (
+    <div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
+      <div className="flex flex-col gap-6 py-6">
+        <div className="flex items-center gap-3">
+          <Calendar size={24} />
+          <h1 className="text-2xl font-bold">
+            {currentMonth} {currentYear}
+          </h1>
+        </div>
 
-				<div className="flex flex-col gap-4">
-					<CurrentBalance balance={balance} />
-					<div className="border rounded-lg p-4 border-gray-200">
-						<p className="text-sm font-medium mb-2">
-							Forecasted Balance From Mistakes By Date
-						</p>
-						<p className="text-lg font-bold">
-							{new Intl.NumberFormat("en-PH", {
-								style: "currency",
-								currency: STARTING_BALANCE.currency,
-							}).format(STARTING_BALANCE.amount)}
-						</p>
-					</div>
-				</div>
+        <div className="flex flex-col gap-4">
+          <CurrentBalance balance={balance} />
+          <div className="border rounded-lg p-4 border-gray-200">
+            <p className="text-sm font-medium mb-2">
+              Forecasted Balance From Mistakes By Date
+            </p>
+            <p className="text-lg font-bold">
+              {new Intl.NumberFormat("en-PH", {
+                style: "currency",
+                currency: STARTING_BALANCE.currency,
+              }).format(STARTING_BALANCE.amount)}
+            </p>
+          </div>
+        </div>
 
-				<div className="flex flex-col gap-4 mt-6">
-					<div className="flex justify-between items-center">
-						<h2 className="text-xl font-semibold">Recent Mistakes</h2>
-						<Link
-							to="/home/mistakes"
-							className="text-sm hover:underline cursor-pointer"
-						>
-							View All
-						</Link>
-					</div>
-					<MistakesList mistakes={mistakes} />
-				</div>
+        <div className="flex flex-col gap-4 mt-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Recent Mistakes</h2>
+            <Link
+              to="/home/mistakes"
+              className="text-sm hover:underline cursor-pointer"
+            >
+              View All
+            </Link>
+          </div>
+          <MistakesList mistakes={mistakes} />
+        </div>
 
-				<div className="flex flex-col gap-4 mt-6">
-					<div className="flex justify-between items-center">
-						<h2 className="text-xl font-semibold">Recent Blessings</h2>
-						<Link
-							to="/home/blessings"
-							className="text-sm hover:underline cursor-pointer"
-						>
-							View All
-						</Link>
-					</div>
-					<BlessingsList blessings={blessings} />
-				</div>
-			</div>
-		</div>
-	);
+        <div className="flex flex-col gap-4 mt-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Recent Blessings</h2>
+            <Link
+              to="/home/blessings"
+              className="text-sm hover:underline cursor-pointer"
+            >
+              View All
+            </Link>
+          </div>
+          <BlessingsList blessings={blessings} />
+        </div>
+      </div>
+    </div>
+  );
 }
