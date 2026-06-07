@@ -6,7 +6,7 @@ import { Stack, Text, Flex } from "@chakra-ui/react";
 import React from "react";
 
 export default async function MistakesList() {
-  const db = await getDb();
+  const db = getDb();
   const mistakes = await db
     .select()
     .from(financialDramaTable)

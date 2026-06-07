@@ -15,7 +15,7 @@ export default async function AllMistakesPage({ searchParams }: PageProps) {
   const startDate = params.startDate;
   const endDate = params.endDate;
 
-  const db = await getDb();
+  const db = getDb();
 
   const conditions = [eq(financialDramaTable.type, "mistake")];
 

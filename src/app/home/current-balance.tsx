@@ -4,7 +4,7 @@ import { Box, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
 export default async function CurrentBalance() {
-  const db = await getDb();
+  const db = getDb();
 
   const rows = (await db.run(
     sql`SELECT SUM(CASE WHEN type = 'blessing' THEN amount ELSE -amount END) AS balance FROM "financialDrama" WHERE date(date) = date('now')`,

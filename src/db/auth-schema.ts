@@ -5,12 +5,9 @@ export const user = sqliteTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuid()),
+  username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  email: text("email").notNull().unique(),
   name: text("name").notNull(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
-    .default(false)
-    .notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .$defaultFn(() => new Date())
     .notNull(),

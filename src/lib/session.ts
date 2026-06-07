@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 export interface SessionData {
   userId: string;
-  email: string;
+  username: string;
   name: string;
   isLoggedIn: boolean;
 }
@@ -31,12 +31,12 @@ export async function getSession(): Promise<IronSession<SessionData>> {
 
 export async function createSession(
   userId: string,
-  email: string,
+  username: string,
   name: string,
 ) {
   const session = await getSession();
   session.userId = userId;
-  session.email = email;
+  session.username = username;
   session.name = name;
   session.isLoggedIn = true;
   await session.save();

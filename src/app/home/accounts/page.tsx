@@ -24,7 +24,7 @@ export default async function AccountsPage() {
     redirect("/");
   }
 
-  const db = await getDb();
+  const db = getDb();
   const accounts = await db
     .select()
     .from(accountsTable)

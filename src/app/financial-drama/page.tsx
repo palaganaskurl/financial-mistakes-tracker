@@ -21,7 +21,7 @@ export default async function AddFinancialDramaPage() {
 
   const userId = session.userId!;
 
-  const db = await getDb();
+  const db = getDb();
   const accounts = await db
     .select()
     .from(accountsTable)

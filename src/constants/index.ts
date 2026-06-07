@@ -95,15 +95,16 @@ export const MAX_PASSWORD_LENGTH = 6;
 
 export const SignUpFormSchema = z
   .object({
-    email: z.email({ message: "Invalid email address." }),
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 3 characters." }),
+    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     password: z.string().min(MAX_PASSWORD_LENGTH, {
       message: "Password must be at least 6 characters.",
     }),
     confirmPassword: z.string().min(MAX_PASSWORD_LENGTH, {
       message: "Confirm Password must be at least 6 characters.",
     }),
-    // Ensure passwords match
-    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match.",
@@ -111,7 +112,9 @@ export const SignUpFormSchema = z
   });
 
 export const SignInFormSchema = z.object({
-  email: z.email({ message: "Invalid email address." }),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters." }),
   password: z.string().min(MAX_PASSWORD_LENGTH, {
     message: "Password must be at least 6 characters.",
   }),

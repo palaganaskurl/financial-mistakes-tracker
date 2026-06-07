@@ -5,15 +5,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "financial-mistakes-tracker",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-03-01",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": ".open-next/assets",
-  },
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
-    "enabled": true,
+    "enabled": false,
   },
   "d1_databases": [
     {
