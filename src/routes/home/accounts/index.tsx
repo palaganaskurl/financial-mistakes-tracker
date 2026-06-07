@@ -4,11 +4,12 @@ import { eq } from "drizzle-orm";
 import { ArrowLeft } from "lucide-react";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
-import { useAppSession } from "@/lib/session";
+
 import AddAccountForm from "./-add-account-form";
 
 const getAccountsData = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const session = await useAppSession();
 
     if (!session.data.userId) {

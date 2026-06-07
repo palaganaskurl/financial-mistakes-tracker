@@ -5,11 +5,11 @@ import type z from "zod";
 import type { SignUpFormSchema } from "@/constants";
 import { user } from "@/db/auth-schema";
 import { getDb } from "@/db/d1";
-import { useAppSession } from "@/lib/session";
 
 export const signUp = createServerFn({ method: "POST" })
   .validator((data: unknown) => data as z.infer<typeof SignUpFormSchema>)
   .handler(async ({ data: values, context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const db = getDb(context);
     const session = await useAppSession();
 

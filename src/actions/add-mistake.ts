@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
-import { useAppSession } from "@/lib/session";
 
 const AddMistakeSchema = z.object({
   type: z.enum(["mistake", "blessing"]),
@@ -17,6 +16,7 @@ const AddMistakeSchema = z.object({
 export const addMistake = createServerFn({ method: "POST" })
   .validator((data: unknown) => AddMistakeSchema.parse(data))
   .handler(async ({ data, context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const session = await useAppSession();
     const userId = session.data.userId;
 

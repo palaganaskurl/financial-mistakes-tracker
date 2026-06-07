@@ -4,7 +4,7 @@ import { and, desc, eq, sql, sum } from "drizzle-orm";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
-import { useAppSession } from "@/lib/session";
+
 import BlessingsList from "./-blessings-list";
 import CurrentBalance from "./-current-balance";
 import FinancialDramaSkeleton from "./-financial-drama-skeleton";
@@ -12,6 +12,7 @@ import MistakesList from "./-mistakes-list";
 
 const getHomeData = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const session = await useAppSession();
     const userId = session.data.userId;
 

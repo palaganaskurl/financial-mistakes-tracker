@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
-import { useAppSession } from "@/lib/session";
 
 const AddAccountSchema = z.object({
   name: z.string().min(1),
@@ -13,6 +12,7 @@ const AddAccountSchema = z.object({
 export const addAccount = createServerFn({ method: "POST" })
   .validator((data: unknown) => AddAccountSchema.parse(data))
   .handler(async ({ data, context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const session = await useAppSession();
     const userId = session.data.userId;
     if (!userId) {

@@ -4,11 +4,12 @@ import { eq } from "drizzle-orm";
 import { BottomNav } from "@/components/bottom-nav";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
-import { useAppSession } from "@/lib/session";
+
 import AddFinancialDramaForm from "./-add-financial-drama-form";
 
 const getPageData = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
+    const { useAppSession } = await import("@/lib/session.server");
     const session = await useAppSession();
 
     if (!session.data.userId) {
