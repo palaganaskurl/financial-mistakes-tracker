@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Home, Plus, Repeat, Wallet } from "lucide-react";
+import { BarChart3, Home, Plus, Repeat, Wallet } from "lucide-react";
 
 export function BottomNav() {
   return (
@@ -35,6 +35,18 @@ export function BottomNav() {
         aria-label="Add"
       >
         <Plus size={26} />
+      </Link>
+
+      <Link
+        to="/home/forecast"
+        className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
+        activeProps={{
+          className:
+            "flex flex-col items-center gap-1 text-primary transition-colors active",
+        }}
+      >
+        <BarChart3 size={22} />
+        <span className="text-xs font-medium">Forecast</span>
       </Link>
 
       <Link

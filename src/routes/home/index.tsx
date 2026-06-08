@@ -1,7 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, sql, sum } from "drizzle-orm";
-import { Bell } from "lucide-react";
+import { AlertCircle, Bell } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
@@ -120,12 +120,65 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         return { ...item, nextDue: current.toISOString().split("T")[0] };
       });
 
+    const recentTransactions = await db
+      .select({
+        type: financialDramaTable.type,
+        category: financialDramaTable.category,
+        date: financialDramaTable.date,
+      })
+      .from(financialDramaTable)
+      .where(
+        and(
+          eq(financialDramaTable.user_id, userId),
+          sql`${financialDramaTable.date} >= date('now', '-366 days')`,
+          sql`${financialDramaTable.date} < date('now')`,
+        ),
+      );
+
+    const loggedSet = new Set(
+      recentTransactions.map((t) => `${t.type}|${t.category}|${t.date}`),
+    );
+
+    const overdueRecurring = allRecurring.flatMap((item) => {
+      const start = new Date(item.start_date);
+      start.setHours(0, 0, 0, 0);
+      if (start >= today) return [];
+
+      if (item.end_date) {
+        const end = new Date(item.end_date);
+        end.setHours(0, 0, 0, 0);
+        if (end < today) return [];
+      }
+
+      const current = new Date(start);
+      let prevDue: Date | null = null;
+      while (current < today) {
+        prevDue = new Date(current);
+        if (item.frequency === "weekly") {
+          current.setDate(current.getDate() + 7);
+        } else if (item.frequency === "monthly") {
+          current.setMonth(current.getMonth() + 1);
+        } else {
+          current.setFullYear(current.getFullYear() + 1);
+        }
+      }
+
+      if (!prevDue) return [];
+
+      const prevDueStr = (prevDue as Date).toISOString().split("T")[0];
+      if (loggedSet.has(`${item.type}|${item.category}|${prevDueStr}`))
+        return [];
+
+      return [{ ...item, lastDue: prevDueStr }];
+    });
+
     return {
       totalBalance,
       monthlyExpenses,
       mistakes,
       blessings,
       upcomingRecurring,
+      overdueRecurring,
     };
   },
 );
@@ -143,6 +196,7 @@ function HomePage() {
     mistakes,
     blessings,
     upcomingRecurring,
+    overdueRecurring,
   } = Route.useLoaderData();
 
   const currentDate = new Date();
@@ -208,6 +262,49 @@ function HomePage() {
           </div>
           <BlessingsList blessings={blessings} />
         </div>
+
+        {overdueRecurring.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+              <AlertCircle size={12} className="text-amber-500" />
+              Overdue
+            </h2>
+            <div className="flex flex-col gap-2">
+              {overdueRecurring.map((item) => (
+                <Card
+                  key={item.id}
+                  className="px-4 py-3 flex-row items-center justify-between gap-3 border-amber-500/40"
+                >
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="font-semibold text-sm truncate">
+                      {item.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground capitalize">
+                      {item.frequency} · Due{" "}
+                      {new Date(item.lastDue).toLocaleDateString("en-PH", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <span
+                    className={`text-sm font-bold shrink-0 ${
+                      item.type === "mistake"
+                        ? "text-destructive"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {item.type === "mistake" ? "-" : "+"}
+                    {new Intl.NumberFormat("en-PH", {
+                      style: "currency",
+                      currency: "PHP",
+                    }).format(item.amount)}
+                  </span>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {upcomingRecurring.length > 0 && (
           <div className="flex flex-col gap-3">
