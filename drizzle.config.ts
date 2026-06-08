@@ -9,6 +9,7 @@ export default defineConfig({
     "./src/db/schema.ts",
     "./src/db/auth-schema.ts",
     "./src/db/accounts-schema.ts",
+    "./src/db/transfers-schema.ts",
   ],
   dialect: 'sqlite',
   driver: "d1-http",

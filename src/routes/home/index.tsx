@@ -1,10 +1,10 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, sql, sum } from "drizzle-orm";
+import { Card } from "@/components/ui/card";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
-
 import BlessingsList from "./-blessings-list";
 import CurrentBalance from "./-current-balance";
 import FinancialDramaSkeleton from "./-financial-drama-skeleton";
@@ -99,7 +99,7 @@ function HomePage() {
 
         <div className="grid grid-cols-2 gap-3">
           <CurrentBalance balance={totalBalance} label="Total Balance" />
-          <div className="flex-1 rounded-xl border border-border p-4">
+          <Card className="flex-1 px-4">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
               Monthly Expenses
             </p>
@@ -109,7 +109,7 @@ function HomePage() {
                 currency: "PHP",
               }).format(monthlyExpenses)}
             </p>
-          </div>
+          </Card>
         </div>
 
         <div className="flex flex-col gap-3">

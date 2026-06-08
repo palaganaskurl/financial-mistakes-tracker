@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Toaster, toast } from "sonner";
 import type { z } from "zod";
 import { addMistake } from "@/actions/add-mistake";
+import { updateFinancialDrama } from "@/actions/update-financial-drama";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -41,14 +42,28 @@ type Accounts = Array<
 type FinancialDramaFormInput = z.input<typeof FinancialDramaFormSchema>;
 type FinancialDramaFormValues = z.output<typeof FinancialDramaFormSchema>;
 
+interface InitialData {
+  id: string;
+  type: "mistake" | "blessing";
+  amount: number;
+  date: string;
+  category: string;
+  is_planned: boolean;
+  notes?: string | null;
+  blessings_account_id?: string | null;
+}
+
 export default function AddFinancialDramaForm({
   accounts,
+  initialData,
 }: {
   accounts: Accounts;
+  initialData?: InitialData;
 }) {
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const isEditMode = !!initialData;
 
   const { register, handleSubmit, watch, formState, control } = useForm<
     FinancialDramaFormInput,
@@ -56,14 +71,26 @@ export default function AddFinancialDramaForm({
     FinancialDramaFormValues
   >({
     resolver: zodResolver(FinancialDramaFormSchema),
-    defaultValues: {
-      type: "mistake",
-      amount: 0,
-      date: new Date(),
-      is_planned: true,
-      notes: "",
-      category: [],
-    },
+    defaultValues: initialData
+      ? {
+          type: initialData.type,
+          amount: initialData.amount,
+          date: new Date(initialData.date),
+          is_planned: initialData.is_planned,
+          notes: initialData.notes ?? "",
+          category: [initialData.category],
+          blessings_account_id: initialData.blessings_account_id
+            ? [initialData.blessings_account_id]
+            : undefined,
+        }
+      : {
+          type: "mistake",
+          amount: 0,
+          date: new Date(),
+          is_planned: true,
+          notes: "",
+          category: [],
+        },
   });
 
   const currentType = watch("type");
@@ -78,24 +105,33 @@ export default function AddFinancialDramaForm({
     console.log("Submitting form with values:", values);
     setPending(true);
     try {
-      await addMistake({
-        data: {
-          type: values.type,
-          amount: values.amount,
-          date:
-            values.date instanceof Date
-              ? format(values.date, "yyyy-MM-dd")
-              : values.date,
-          category: values.category[0],
-          is_planned: values.is_planned ?? true,
-          notes: values.notes,
-          blessings_account_id: values.blessings_account_id?.[0],
-        },
-      });
-      toast.success("Successfully added financial drama!");
+      const payload = {
+        type: values.type,
+        amount: values.amount,
+        date:
+          values.date instanceof Date
+            ? format(values.date, "yyyy-MM-dd")
+            : values.date,
+        category: values.category[0],
+        is_planned: values.is_planned ?? true,
+        notes: values.notes,
+        blessings_account_id: values.blessings_account_id?.[0],
+      };
+
+      if (isEditMode && initialData) {
+        await updateFinancialDrama({
+          data: { id: initialData.id, ...payload },
+        });
+        toast.success("Successfully updated!");
+      } else {
+        await addMistake({ data: payload });
+        toast.success("Successfully added financial drama!");
+      }
       setTimeout(() => navigate({ to: "/home" }), 1000);
     } catch {
-      toast.error("Failed to add financial drama.");
+      toast.error(
+        isEditMode ? "Failed to update." : "Failed to add financial drama.",
+      );
     } finally {
       setPending(false);
     }
@@ -317,7 +353,7 @@ export default function AddFinancialDramaForm({
           </div>
 
           <Button type="submit" size="lg" disabled={pending} className="w-full">
-            {pending ? "Submitting..." : "Submit"}
+            {pending ? "Submitting..." : isEditMode ? "Update" : "Submit"}
           </Button>
         </div>
       </form>

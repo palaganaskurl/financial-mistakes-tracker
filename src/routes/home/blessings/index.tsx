@@ -1,8 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Pencil } from "lucide-react";
+import { useState } from "react";
 import { z } from "zod";
+import { deleteFinancialDrama } from "@/actions/delete-financial-drama";
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog";
+import { Card } from "@/components/ui/card";
 import { BlessingCategoryToLabelMap } from "@/constants";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
@@ -50,6 +54,18 @@ function AllBlessingsPage() {
   const { blessings, totalAmount } = Route.useLoaderData();
   const { startDate, endDate } = Route.useSearch();
   const hasFilter = !!startDate || !!endDate;
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function handleDelete(id: string) {
+    setDeletingId(id);
+    try {
+      await deleteFinancialDrama({ data: { id } });
+      router.invalidate();
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
     <div className="w-full px-4 md:px-6 pb-20 md:pb-6">
@@ -67,7 +83,7 @@ function AllBlessingsPage() {
         </div>
 
         {hasFilter && (
-          <div className="border rounded-lg p-4 border-gray-200">
+          <Card className="px-4">
             <p className="text-sm font-medium mb-2">Total</p>
             <p className="text-lg font-bold">
               {new Intl.NumberFormat("en-PH", {
@@ -75,29 +91,44 @@ function AllBlessingsPage() {
                 currency: "PHP",
               }).format(totalAmount)}
             </p>
-          </div>
+          </Card>
         )}
 
         <div className="flex flex-col gap-3">
           {blessings.map((blessing) => (
             <div
               key={blessing.id}
-              className="flex justify-between items-center p-3 border rounded-md border-gray-200 hover:bg-gray-50"
+              className="flex items-center gap-2 p-3 ring-1 ring-foreground/10"
             >
-              <span className="text-sm flex-1">
-                {BlessingCategoryToLabelMap[blessing.category]}
-              </span>
-              <span className="text-sm text-right flex-1">
-                {new Intl.DateTimeFormat("en-PH", {
-                  dateStyle: "medium",
-                }).format(new Date(blessing.date))}
-              </span>
-              <span className="text-sm font-medium text-right flex-1">
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-sm font-medium">
+                  {BlessingCategoryToLabelMap[blessing.category]}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {new Intl.DateTimeFormat("en-PH", {
+                    dateStyle: "medium",
+                  }).format(new Date(blessing.date))}
+                </span>
+              </div>
+              <span className="text-sm font-semibold text-green-600 whitespace-nowrap">
+                +
                 {new Intl.NumberFormat("en-PH", {
                   style: "currency",
                   currency: "PHP",
                 }).format(blessing.amount)}
               </span>
+              <Link to="/financial-drama/$id" params={{ id: blessing.id }}>
+                <button
+                  type="button"
+                  className="p-1.5 hover:opacity-70 transition-opacity text-muted-foreground"
+                >
+                  <Pencil size={15} />
+                </button>
+              </Link>
+              <DeleteConfirmDialog
+                onConfirm={() => handleDelete(blessing.id)}
+                disabled={deletingId === blessing.id}
+              />
             </div>
           ))}
 

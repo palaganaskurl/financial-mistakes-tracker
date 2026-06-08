@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import { MistakeCategoryToLabelMap } from "@/constants";
 import type { financialDramaTable } from "@/db/schema";
 
@@ -10,9 +11,9 @@ interface MistakesListProps {
 export default function MistakesList({ mistakes }: MistakesListProps) {
   if (mistakes.length === 0) {
     return (
-      <div className="rounded-xl border border-border p-4 text-center text-muted-foreground text-sm">
+      <Card className="px-4 text-center text-muted-foreground text-sm">
         No mistakes logged yet.
-      </div>
+      </Card>
     );
   }
 
@@ -21,7 +22,7 @@ export default function MistakesList({ mistakes }: MistakesListProps) {
       {mistakes.map((mistake) => (
         <div
           key={mistake.id}
-          className="flex justify-between items-center px-4 py-3 rounded-xl bg-card hover:bg-accent/40 transition-colors"
+          className="flex justify-between items-center px-4 py-3 bg-card ring-1 ring-foreground/10 hover:bg-accent/40 transition-colors"
         >
           <span className="text-sm flex-1 font-medium">
             {MistakeCategoryToLabelMap[mistake.category]}

@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as FinancialDramaIndexRouteImport } from './routes/financial-drama/index'
+import { Route as FinancialDramaIdRouteImport } from './routes/financial-drama/$id'
 import { Route as HomeMistakesIndexRouteImport } from './routes/home/mistakes/index'
 import { Route as HomeBlessingsIndexRouteImport } from './routes/home/blessings/index'
 import { Route as HomeAccountsIndexRouteImport } from './routes/home/accounts/index'
@@ -43,6 +44,11 @@ const FinancialDramaIndexRoute = FinancialDramaIndexRouteImport.update({
   path: '/financial-drama/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FinancialDramaIdRoute = FinancialDramaIdRouteImport.update({
+  id: '/financial-drama/$id',
+  path: '/financial-drama/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeMistakesIndexRoute = HomeMistakesIndexRouteImport.update({
   id: '/mistakes/',
   path: '/mistakes/',
@@ -62,6 +68,7 @@ const HomeAccountsIndexRoute = HomeAccountsIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRouteWithChildren
+  '/financial-drama/$id': typeof FinancialDramaIdRoute
   '/financial-drama/': typeof FinancialDramaIndexRoute
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/financial-drama/$id': typeof FinancialDramaIdRoute
   '/financial-drama': typeof FinancialDramaIndexRoute
   '/home': typeof HomeIndexRoute
   '/sign-up': typeof SignUpIndexRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRouteWithChildren
+  '/financial-drama/$id': typeof FinancialDramaIdRoute
   '/financial-drama/': typeof FinancialDramaIndexRoute
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/home'
+    | '/financial-drama/$id'
     | '/financial-drama/'
     | '/home/'
     | '/sign-up/'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/financial-drama/$id'
     | '/financial-drama'
     | '/home'
     | '/sign-up'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/home'
+    | '/financial-drama/$id'
     | '/financial-drama/'
     | '/home/'
     | '/sign-up/'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRouteWithChildren
+  FinancialDramaIdRoute: typeof FinancialDramaIdRoute
   FinancialDramaIndexRoute: typeof FinancialDramaIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
 }
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/financial-drama'
       fullPath: '/financial-drama/'
       preLoaderRoute: typeof FinancialDramaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financial-drama/$id': {
+      id: '/financial-drama/$id'
+      path: '/financial-drama/$id'
+      fullPath: '/financial-drama/$id'
+      preLoaderRoute: typeof FinancialDramaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/mistakes/': {
@@ -208,6 +228,7 @@ const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRouteWithChildren,
+  FinancialDramaIdRoute: FinancialDramaIdRoute,
   FinancialDramaIndexRoute: FinancialDramaIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
 }

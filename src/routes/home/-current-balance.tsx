@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Card } from "@/components/ui/card";
 
 interface CurrentBalanceProps {
   balance: number;
@@ -14,8 +15,8 @@ export default function CurrentBalance({
   const isPositive = balance >= 0;
 
   const content = (
-    <div
-      className={`flex-1 rounded-xl border border-border p-4 ${href ? "cursor-pointer hover:border-primary/40 hover:bg-accent/30 transition-all" : ""}`}
+    <Card
+      className={`flex-1 px-4 ${href ? "cursor-pointer hover:ring-primary/40 hover:bg-accent/30 transition-all" : ""}`}
     >
       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
         {label}
@@ -28,7 +29,7 @@ export default function CurrentBalance({
           currency: "PHP",
         }).format(balance)}
       </p>
-    </div>
+    </Card>
   );
 
   if (href) {
