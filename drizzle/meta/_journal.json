@@ -8,6 +8,20 @@
       "when": 1780854392751,
       "tag": "0000_pale_catseye",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1780854392752,
+      "tag": "0001_add_transfers",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1780854392753,
+      "tag": "0002_add_recurring",
+      "breakpoints": true
     }
   ]
 }

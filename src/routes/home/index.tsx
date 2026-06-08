@@ -1,10 +1,11 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, sql, sum } from "drizzle-orm";
+import { Bell } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
-import { financialDramaTable } from "@/db/schema";
+import { financialDramaTable, recurringTable } from "@/db/schema";
 import BlessingsList from "./-blessings-list";
 import CurrentBalance from "./-current-balance";
 import FinancialDramaSkeleton from "./-financial-drama-skeleton";
@@ -47,6 +48,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         and(
           eq(financialDramaTable.type, "mistake"),
           eq(financialDramaTable.user_id, userId),
+          sql`${financialDramaTable.date} <= date('now')`,
         ),
       )
       .orderBy(desc(financialDramaTable.date))
@@ -59,12 +61,72 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         and(
           eq(financialDramaTable.type, "blessing"),
           eq(financialDramaTable.user_id, userId),
+          sql`${financialDramaTable.date} <= date('now')`,
         ),
       )
       .orderBy(desc(financialDramaTable.date))
       .limit(5);
 
-    return { totalBalance, monthlyExpenses, mistakes, blessings };
+    const allRecurring = await db
+      .select()
+      .from(recurringTable)
+      .where(
+        and(
+          eq(recurringTable.user_id, userId),
+          eq(recurringTable.is_active, true),
+        ),
+      );
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const windowEnd = new Date(today);
+    windowEnd.setDate(windowEnd.getDate() + 7);
+
+    const upcomingRecurring = allRecurring
+      .filter((item) => {
+        if (item.end_date) {
+          const end = new Date(item.end_date);
+          end.setHours(0, 0, 0, 0);
+          if (end < today) return false;
+        }
+        const start = new Date(item.start_date);
+        start.setHours(0, 0, 0, 0);
+        const current = new Date(start);
+        if (current > windowEnd) return false;
+        while (current < today) {
+          if (item.frequency === "weekly") {
+            current.setDate(current.getDate() + 7);
+          } else if (item.frequency === "monthly") {
+            current.setMonth(current.getMonth() + 1);
+          } else {
+            current.setFullYear(current.getFullYear() + 1);
+          }
+        }
+        return current <= windowEnd;
+      })
+      .map((item) => {
+        const start = new Date(item.start_date);
+        start.setHours(0, 0, 0, 0);
+        const current = new Date(start);
+        while (current < today) {
+          if (item.frequency === "weekly") {
+            current.setDate(current.getDate() + 7);
+          } else if (item.frequency === "monthly") {
+            current.setMonth(current.getMonth() + 1);
+          } else {
+            current.setFullYear(current.getFullYear() + 1);
+          }
+        }
+        return { ...item, nextDue: current.toISOString().split("T")[0] };
+      });
+
+    return {
+      totalBalance,
+      monthlyExpenses,
+      mistakes,
+      blessings,
+      upcomingRecurring,
+    };
   },
 );
 
@@ -75,8 +137,13 @@ export const Route = createFileRoute("/home/")({
 });
 
 function HomePage() {
-  const { totalBalance, monthlyExpenses, mistakes, blessings } =
-    Route.useLoaderData();
+  const {
+    totalBalance,
+    monthlyExpenses,
+    mistakes,
+    blessings,
+    upcomingRecurring,
+  } = Route.useLoaderData();
 
   const currentDate = new Date();
   const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
@@ -141,6 +208,56 @@ function HomePage() {
           </div>
           <BlessingsList blessings={blessings} />
         </div>
+
+        {upcomingRecurring.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                <Bell size={12} />
+                Upcoming (Next 7 Days)
+              </h2>
+              <Link
+                to="/home/recurring"
+                className="text-xs text-primary hover:underline"
+              >
+                View All
+              </Link>
+            </div>
+            <div className="flex flex-col gap-2">
+              {upcomingRecurring.map((item) => (
+                <Card
+                  key={item.id}
+                  className="px-4 py-3 flex-row items-center justify-between gap-3"
+                >
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="font-semibold text-sm truncate">
+                      {item.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground capitalize">
+                      {item.frequency} · Due{" "}
+                      {new Date(item.nextDue) <=
+                      new Date(new Date().setHours(0, 0, 0, 0))
+                        ? "today"
+                        : new Date(item.nextDue).toLocaleDateString("en-PH", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                    </span>
+                  </div>
+                  <span
+                    className={`text-sm font-bold shrink-0 ${item.type === "mistake" ? "text-destructive" : "text-green-600"}`}
+                  >
+                    {item.type === "mistake" ? "-" : "+"}
+                    {new Intl.NumberFormat("en-PH", {
+                      style: "currency",
+                      currency: "PHP",
+                    }).format(item.amount)}
+                  </span>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

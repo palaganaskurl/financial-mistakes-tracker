@@ -15,6 +15,7 @@ import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as FinancialDramaIndexRouteImport } from './routes/financial-drama/index'
 import { Route as FinancialDramaIdRouteImport } from './routes/financial-drama/$id'
+import { Route as HomeRecurringIndexRouteImport } from './routes/home/recurring/index'
 import { Route as HomeMistakesIndexRouteImport } from './routes/home/mistakes/index'
 import { Route as HomeBlessingsIndexRouteImport } from './routes/home/blessings/index'
 import { Route as HomeAccountsIndexRouteImport } from './routes/home/accounts/index'
@@ -49,6 +50,11 @@ const FinancialDramaIdRoute = FinancialDramaIdRouteImport.update({
   path: '/financial-drama/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeRecurringIndexRoute = HomeRecurringIndexRouteImport.update({
+  id: '/recurring/',
+  path: '/recurring/',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeMistakesIndexRoute = HomeMistakesIndexRouteImport.update({
   id: '/mistakes/',
   path: '/mistakes/',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/home/accounts/': typeof HomeAccountsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
+  '/home/recurring/': typeof HomeRecurringIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/home/accounts': typeof HomeAccountsIndexRoute
   '/home/blessings': typeof HomeBlessingsIndexRoute
   '/home/mistakes': typeof HomeMistakesIndexRoute
+  '/home/recurring': typeof HomeRecurringIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/home/accounts/': typeof HomeAccountsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
+  '/home/recurring/': typeof HomeRecurringIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/home/accounts/'
     | '/home/blessings/'
     | '/home/mistakes/'
+    | '/home/recurring/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/home/accounts'
     | '/home/blessings'
     | '/home/mistakes'
+    | '/home/recurring'
   id:
     | '__root__'
     | '/'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/home/accounts/'
     | '/home/blessings/'
     | '/home/mistakes/'
+    | '/home/recurring/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -185,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinancialDramaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/recurring/': {
+      id: '/home/recurring/'
+      path: '/recurring'
+      fullPath: '/home/recurring/'
+      preLoaderRoute: typeof HomeRecurringIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/mistakes/': {
       id: '/home/mistakes/'
       path: '/mistakes'
@@ -214,6 +233,7 @@ interface HomeRouteChildren {
   HomeAccountsIndexRoute: typeof HomeAccountsIndexRoute
   HomeBlessingsIndexRoute: typeof HomeBlessingsIndexRoute
   HomeMistakesIndexRoute: typeof HomeMistakesIndexRoute
+  HomeRecurringIndexRoute: typeof HomeRecurringIndexRoute
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
@@ -221,6 +241,7 @@ const HomeRouteChildren: HomeRouteChildren = {
   HomeAccountsIndexRoute: HomeAccountsIndexRoute,
   HomeBlessingsIndexRoute: HomeBlessingsIndexRoute,
   HomeMistakesIndexRoute: HomeMistakesIndexRoute,
+  HomeRecurringIndexRoute: HomeRecurringIndexRoute,
 }
 
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)

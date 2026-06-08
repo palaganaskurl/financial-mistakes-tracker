@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Home, Plus, Wallet } from "lucide-react";
+import { Home, Plus, Repeat, Wallet } from "lucide-react";
 
 export function BottomNav() {
   return (
@@ -15,6 +15,18 @@ export function BottomNav() {
       >
         <Home size={22} />
         <span className="text-xs font-medium">Home</span>
+      </Link>
+
+      <Link
+        to="/home/recurring"
+        className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
+        activeProps={{
+          className:
+            "flex flex-col items-center gap-1 text-primary transition-colors active",
+        }}
+      >
+        <Repeat size={22} />
+        <span className="text-xs font-medium">Recurring</span>
       </Link>
 
       <Link

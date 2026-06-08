@@ -40,6 +40,46 @@ export const BlessingCategoryToLabelMap = Object.fromEntries(
 );
 
 export const FinancialDramaTypes = ["mistake", "blessing"] as const;
+
+export const RecurringFrequencies = [
+  { label: "Weekly", value: "weekly" },
+  { label: "Monthly", value: "monthly" },
+  { label: "Yearly", value: "yearly" },
+] as const;
+export type RecurringFrequency = (typeof RecurringFrequencies)[number]["value"];
+
+export const RecurringFormSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required." }),
+    type: z.enum(FinancialDramaTypes, { message: "Please select a type." }),
+    amount: z.coerce
+      .number()
+      .gt(0, { message: "Amount must be greater than 0." }),
+    category: z
+      .string({ message: "Please select a category." })
+      .array()
+      .nonempty({ message: "Please select a category." }),
+    frequency: z.enum(["weekly", "monthly", "yearly"], {
+      message: "Please select a frequency.",
+    }),
+    start_date: z.date({ message: "Start date is required." }),
+    end_date: z.date().optional(),
+    is_active: z.boolean().default(true),
+  })
+  .superRefine((data, ctx) => {
+    const validCategories: string[] =
+      data.type === "mistake"
+        ? MistakeCategories.map((c) => c.value)
+        : BlessingCategories.map((c) => c.value);
+
+    if (!data.category.every((cat) => validCategories.includes(cat))) {
+      ctx.addIssue({
+        path: ["category"],
+        code: "custom",
+        message: `Invalid category for type "${data.type}".`,
+      });
+    }
+  });
 export const FinancialDramaFormSchema = z
   .object({
     type: z.enum(FinancialDramaTypes, {

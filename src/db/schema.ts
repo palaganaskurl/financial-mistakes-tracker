@@ -2,8 +2,10 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuid } from "uuid";
 import { accountsTable } from "./accounts-schema";
 import * as authSchema from "./auth-schema";
+import { recurringTable } from "./recurring-schema";
 import { transfersTable } from "./transfers-schema";
 
+export { recurringTable } from "./recurring-schema";
 export { transfersTable } from "./transfers-schema";
 
 export const financialDramaTable = sqliteTable("financialDrama", {
@@ -34,4 +36,5 @@ export const schema = {
   ...financialDramaTable,
   ...accountsTable,
   transfersTable,
+  recurringTable,
 } as const;
