@@ -118,7 +118,7 @@ function BudgetCard({
           </button>
           <DeleteConfirmDialog
             onConfirm={() => onDelete(budget.id)}
-            isDeleting={isDeleting}
+            disabled={isDeleting}
           />
         </div>
       </div>

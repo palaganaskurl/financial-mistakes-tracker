@@ -18,15 +18,15 @@ export function BottomNav() {
       </Link>
 
       <Link
-        to="/home/recurring"
+        to="/home/budgets"
         className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
         activeProps={{
           className:
             "flex flex-col items-center gap-1 text-primary transition-colors active",
         }}
       >
-        <Repeat size={22} />
-        <span className="text-xs font-medium">Recurring</span>
+        <Wallet size={22} />
+        <span className="text-xs font-medium">Budget</span>
       </Link>
 
       <Link
@@ -38,7 +38,7 @@ export function BottomNav() {
       </Link>
 
       <Link
-        to="/home/forecast"
+        to="/home/analytics"
         className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
         activeProps={{
           className:
@@ -46,19 +46,19 @@ export function BottomNav() {
         }}
       >
         <BarChart3 size={22} />
-        <span className="text-xs font-medium">Forecast</span>
+        <span className="text-xs font-medium">Analytics</span>
       </Link>
 
       <Link
-        to="/home/accounts"
+        to="/home/recurring"
         className="flex flex-col items-center gap-1 text-muted-foreground [&.active]:text-primary transition-colors"
         activeProps={{
           className:
             "flex flex-col items-center gap-1 text-primary transition-colors active",
         }}
       >
-        <Wallet size={22} />
-        <span className="text-xs font-medium">Accounts</span>
+        <Repeat size={22} />
+        <span className="text-xs font-medium">Recurring</span>
       </Link>
     </nav>
   );

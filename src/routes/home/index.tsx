@@ -233,6 +233,21 @@ function HomePage() {
           </Card>
         </div>
 
+        <div className="grid grid-cols-2 gap-3">
+          <Link
+            to="/home/accounts"
+            className="flex items-center justify-center py-3 bg-card ring-1 ring-foreground/10 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            Accounts
+          </Link>
+          <Link
+            to="/home/forecast"
+            className="flex items-center justify-center py-3 bg-card ring-1 ring-foreground/10 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            Forecast
+          </Link>
+        </div>
+
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">

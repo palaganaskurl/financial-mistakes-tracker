@@ -130,6 +130,30 @@ export const FinancialDramaFormSchema = z
     }
   });
 
+export const MONTHS = [
+  { label: "January", value: 1 },
+  { label: "February", value: 2 },
+  { label: "March", value: 3 },
+  { label: "April", value: 4 },
+  { label: "May", value: 5 },
+  { label: "June", value: 6 },
+  { label: "July", value: 7 },
+  { label: "August", value: 8 },
+  { label: "September", value: 9 },
+  { label: "October", value: 10 },
+  { label: "November", value: 11 },
+  { label: "December", value: 12 },
+] as const;
+
+export const BudgetFormSchema = z.object({
+  category: z.string().min(1, { message: "Category is required." }),
+  amount_limit: z.coerce
+    .number()
+    .gt(0, { message: "Amount must be greater than 0." }),
+  month: z.coerce.number().min(1).max(12),
+  year: z.coerce.number().min(2020),
+});
+
 export const MAX_PASSWORD_LENGTH = 6;
 
 export const SignUpFormSchema = z

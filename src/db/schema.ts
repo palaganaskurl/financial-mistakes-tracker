@@ -2,9 +2,11 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuid } from "uuid";
 import { accountsTable } from "./accounts-schema";
 import * as authSchema from "./auth-schema";
+import { budgetsTable } from "./budgets-schema";
 import { recurringTable } from "./recurring-schema";
 import { transfersTable } from "./transfers-schema";
 
+export { budgetsTable } from "./budgets-schema";
 export { recurringTable } from "./recurring-schema";
 export { transfersTable } from "./transfers-schema";
 
@@ -37,4 +39,5 @@ export const schema = {
   ...accountsTable,
   transfersTable,
   recurringTable,
+  budgetsTable,
 } as const;
