@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { BottomNav } from "@/components/bottom-nav";
-import { PageTransition } from "@/components/page-transition";
 import { getCurrentUser } from "@/lib/session";
 
 export const Route = createFileRoute("/home")({
@@ -17,9 +16,7 @@ export const Route = createFileRoute("/home")({
 function HomeLayout() {
   return (
     <>
-      <PageTransition>
-        <Outlet />
-      </PageTransition>
+      <Outlet />
       <BottomNav />
     </>
   );

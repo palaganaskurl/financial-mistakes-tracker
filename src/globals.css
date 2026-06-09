@@ -123,36 +123,6 @@
     --mistake: oklch(0.704 0.191 22.216);
 }
 
-/* View Transitions API animations */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes slide-from-bottom {
-  from { transform: translateY(12px); }
-  to { transform: translateY(0); }
-}
-
-@keyframes slide-to-top {
-  from { transform: translateY(0); }
-  to { transform: translateY(-12px); }
-}
-
-::view-transition-old(page-content) {
-  animation: 250ms ease-out both fade-out, 250ms ease-out both slide-to-top;
-  pointer-events: none;
-}
-
-::view-transition-new(page-content) {
-  animation: 300ms ease-out both fade-in, 300ms ease-out both slide-from-bottom;
-  pointer-events: none;
-}
 
 @layer base {
   * {
