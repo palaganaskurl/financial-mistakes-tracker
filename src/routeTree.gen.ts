@@ -18,7 +18,9 @@ import { Route as FinancialDramaIdRouteImport } from './routes/financial-drama/$
 import { Route as HomeRecurringIndexRouteImport } from './routes/home/recurring/index'
 import { Route as HomeMistakesIndexRouteImport } from './routes/home/mistakes/index'
 import { Route as HomeForecastIndexRouteImport } from './routes/home/forecast/index'
+import { Route as HomeBudgetsIndexRouteImport } from './routes/home/budgets/index'
 import { Route as HomeBlessingsIndexRouteImport } from './routes/home/blessings/index'
+import { Route as HomeAnalyticsIndexRouteImport } from './routes/home/analytics/index'
 import { Route as HomeAccountsIndexRouteImport } from './routes/home/accounts/index'
 
 const HomeRoute = HomeRouteImport.update({
@@ -66,9 +68,19 @@ const HomeForecastIndexRoute = HomeForecastIndexRouteImport.update({
   path: '/forecast/',
   getParentRoute: () => HomeRoute,
 } as any)
+const HomeBudgetsIndexRoute = HomeBudgetsIndexRouteImport.update({
+  id: '/budgets/',
+  path: '/budgets/',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeBlessingsIndexRoute = HomeBlessingsIndexRouteImport.update({
   id: '/blessings/',
   path: '/blessings/',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeAnalyticsIndexRoute = HomeAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
   getParentRoute: () => HomeRoute,
 } as any)
 const HomeAccountsIndexRoute = HomeAccountsIndexRouteImport.update({
@@ -85,7 +97,9 @@ export interface FileRoutesByFullPath {
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/home/accounts/': typeof HomeAccountsIndexRoute
+  '/home/analytics/': typeof HomeAnalyticsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
+  '/home/budgets/': typeof HomeBudgetsIndexRoute
   '/home/forecast/': typeof HomeForecastIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
   '/home/recurring/': typeof HomeRecurringIndexRoute
@@ -97,7 +111,9 @@ export interface FileRoutesByTo {
   '/home': typeof HomeIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/home/accounts': typeof HomeAccountsIndexRoute
+  '/home/analytics': typeof HomeAnalyticsIndexRoute
   '/home/blessings': typeof HomeBlessingsIndexRoute
+  '/home/budgets': typeof HomeBudgetsIndexRoute
   '/home/forecast': typeof HomeForecastIndexRoute
   '/home/mistakes': typeof HomeMistakesIndexRoute
   '/home/recurring': typeof HomeRecurringIndexRoute
@@ -111,7 +127,9 @@ export interface FileRoutesById {
   '/home/': typeof HomeIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/home/accounts/': typeof HomeAccountsIndexRoute
+  '/home/analytics/': typeof HomeAnalyticsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
+  '/home/budgets/': typeof HomeBudgetsIndexRoute
   '/home/forecast/': typeof HomeForecastIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
   '/home/recurring/': typeof HomeRecurringIndexRoute
@@ -126,7 +144,9 @@ export interface FileRouteTypes {
     | '/home/'
     | '/sign-up/'
     | '/home/accounts/'
+    | '/home/analytics/'
     | '/home/blessings/'
+    | '/home/budgets/'
     | '/home/forecast/'
     | '/home/mistakes/'
     | '/home/recurring/'
@@ -138,7 +158,9 @@ export interface FileRouteTypes {
     | '/home'
     | '/sign-up'
     | '/home/accounts'
+    | '/home/analytics'
     | '/home/blessings'
+    | '/home/budgets'
     | '/home/forecast'
     | '/home/mistakes'
     | '/home/recurring'
@@ -151,7 +173,9 @@ export interface FileRouteTypes {
     | '/home/'
     | '/sign-up/'
     | '/home/accounts/'
+    | '/home/analytics/'
     | '/home/blessings/'
+    | '/home/budgets/'
     | '/home/forecast/'
     | '/home/mistakes/'
     | '/home/recurring/'
@@ -230,11 +254,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeForecastIndexRouteImport
       parentRoute: typeof HomeRoute
     }
+    '/home/budgets/': {
+      id: '/home/budgets/'
+      path: '/budgets'
+      fullPath: '/home/budgets/'
+      preLoaderRoute: typeof HomeBudgetsIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/blessings/': {
       id: '/home/blessings/'
       path: '/blessings'
       fullPath: '/home/blessings/'
       preLoaderRoute: typeof HomeBlessingsIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/analytics/': {
+      id: '/home/analytics/'
+      path: '/analytics'
+      fullPath: '/home/analytics/'
+      preLoaderRoute: typeof HomeAnalyticsIndexRouteImport
       parentRoute: typeof HomeRoute
     }
     '/home/accounts/': {
@@ -250,7 +288,9 @@ declare module '@tanstack/react-router' {
 interface HomeRouteChildren {
   HomeIndexRoute: typeof HomeIndexRoute
   HomeAccountsIndexRoute: typeof HomeAccountsIndexRoute
+  HomeAnalyticsIndexRoute: typeof HomeAnalyticsIndexRoute
   HomeBlessingsIndexRoute: typeof HomeBlessingsIndexRoute
+  HomeBudgetsIndexRoute: typeof HomeBudgetsIndexRoute
   HomeForecastIndexRoute: typeof HomeForecastIndexRoute
   HomeMistakesIndexRoute: typeof HomeMistakesIndexRoute
   HomeRecurringIndexRoute: typeof HomeRecurringIndexRoute
@@ -259,7 +299,9 @@ interface HomeRouteChildren {
 const HomeRouteChildren: HomeRouteChildren = {
   HomeIndexRoute: HomeIndexRoute,
   HomeAccountsIndexRoute: HomeAccountsIndexRoute,
+  HomeAnalyticsIndexRoute: HomeAnalyticsIndexRoute,
   HomeBlessingsIndexRoute: HomeBlessingsIndexRoute,
+  HomeBudgetsIndexRoute: HomeBudgetsIndexRoute,
   HomeForecastIndexRoute: HomeForecastIndexRoute,
   HomeMistakesIndexRoute: HomeMistakesIndexRoute,
   HomeRecurringIndexRoute: HomeRecurringIndexRoute,
