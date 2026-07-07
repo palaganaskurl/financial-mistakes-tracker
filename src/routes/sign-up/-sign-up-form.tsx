@@ -33,7 +33,7 @@ export function SignUpForm() {
       const result = await signUp({ data: values });
 
       if (result.success) {
-        navigate({ to: "/home" });
+        navigate({ to: "/home/onboarding" });
       } else if (!result.success) {
         setSignUpErrors(result.error);
       }

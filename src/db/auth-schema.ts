@@ -15,4 +15,5 @@ export const user = sqliteTable("user", {
     .$defaultFn(() => new Date())
     .$onUpdate(() => new Date())
     .notNull(),
+  onboardingCompleted: integer("onboarding_completed").default(0).notNull(),
 });
