@@ -1,71 +1,83 @@
 ---
-name: Financial Drama
+version: alpha
+
+name: Warm Financial Drama
+
+description: A warm, dark finance tracker for tracking mistakes (expenses) and blessings (incomes).
+
 colors:
-  background: '#090b0c'
-  foreground: '#f9fbfb'
-  card: '#161b1d'
-  card-foreground: '#f9fbfb'
-  popover: '#161b1d'
-  popover-foreground: '#f9fbfb'
-  primary: '#e3e7e8'
-  primary-foreground: '#161b1d'
-  secondary: '#22292b'
-  secondary-foreground: '#f9fbfb'
-  muted: '#22292b'
-  muted-foreground: '#9ca8ab'
-  accent: '#22292b'
-  accent-foreground: '#f9fbfb'
-  destructive: '#ff6467'
-  border: 'rgba(255,255,255,0.10)'
-  input: 'rgba(255,255,255,0.15)'
-  ring: '#67787c'
-  blessing: '#5dc879'
-  mistake: '#ff6467'
-  warning: '#f59e0b'
-  chart-indigo: '#6366f1'
-  chart-amber: '#f59e0b'
-  chart-green: '#10b981'
-  chart-red: '#ef4444'
-  chart-blue: '#3b82f6'
-  chart-violet: '#8b5cf6'
+  background: '#0f0d0b'
+  foreground: '#f5f0e8'
+  card: '#1a1614'
+  card-foreground: '#f5f0e8'
+  popover: '#1a1614'
+  popover-foreground: '#f5f0e8'
+  primary: '#e8ddd0'
+  primary-foreground: '#1a1614'
+  secondary: '#221e1a'
+  secondary-foreground: '#f5f0e8'
+  muted: '#221e1a'
+  muted-foreground: '#a09888'
+  accent: '#221e1a'
+  accent-foreground: '#f5f0e8'
+  destructive: '#e8504a'
+  border: 'rgba(245,240,232,0.08)'
+  input: 'rgba(245,240,232,0.12)'
+  ring: '#7a7068'
+  blessing: '#4cbf8a'
+  mistake: '#e8504a'
+  warning: '#d4a04a'
+  chart-1: '#e8504a'
+  chart-2: '#4cbf8a'
+  chart-3: '#d4a04a'
+  chart-4: '#7a8aa8'
+  chart-5: '#c89050'
+
 typography:
   display:
     fontFamily: Inter Variable
     fontSize: 30px
-    fontWeight: '700'
-    lineHeight: 36px
-    letterSpacing: '0'
-  page-title:
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: 0
+  headline:
     fontFamily: Inter Variable
     fontSize: 24px
-    fontWeight: '700'
-    lineHeight: 32px
-    letterSpacing: '0'
-  section-label:
+    fontWeight: 700
+    lineHeight: 1.333
+    letterSpacing: 0
+  title:
     fontFamily: Inter Variable
-    fontSize: 12px
-    fontWeight: '600'
-    lineHeight: 16px
-    letterSpacing: 0.10em
-    textTransform: uppercase
+    fontSize: 18px
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: 0
   body:
     fontFamily: Inter Variable
     fontSize: 14px
-    fontWeight: '500'
-    lineHeight: 20px
-    letterSpacing: '0'
+    fontWeight: 500
+    lineHeight: 1.429
+    letterSpacing: 0
   caption:
     fontFamily: Inter Variable
     fontSize: 12px
-    fontWeight: '400'
-    lineHeight: 18px
-    letterSpacing: '0'
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: 0
+  label:
+    fontFamily: Inter Variable
+    fontSize: 12px
+    fontWeight: 600
+    lineHeight: 1.333
+    letterSpacing: 0.1em
+
 rounded:
   none: 0
   sm: 0.375rem
   md: 0.5rem
   lg: 0.625rem
   full: 9999px
+
 spacing:
   unit: 4px
   xs: 4px
@@ -76,176 +88,151 @@ spacing:
   page-mobile: 16px
   page-tablet: 24px
   bottom-nav-height: 72px
+
+components:
+  button-primary:
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.primary-foreground}'
+    rounded: '{rounded.none}'
+    padding: 8px 16px
+    height: 32px
+    typography: '{typography.label}'
+  button-destructive:
+    backgroundColor: '{colors.destructive}'
+    textColor: '{colors.foreground}'
+    rounded: '{rounded.none}'
+    padding: 8px 16px
+    height: 32px
+  card-default:
+    backgroundColor: '{colors.card}'
+    textColor: '{colors.card-foreground}'
+    rounded: '{rounded.none}'
+    padding: 16px
+  input-default:
+    backgroundColor: '{colors.card}'
+    textColor: '{colors.foreground}'
+    borderColor: '{colors.input}'
+    rounded: '{rounded.none}'
+    padding: 8px 10px
+    height: 32px
+    typography: '{typography.body}'
+  nav-bottom:
+    backgroundColor: '{colors.card}'
+    height: 72px
+  nav-add-button:
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.primary-foreground}'
+    size: 56px
+    rounded: '{rounded.full}'
 ---
 
-# Design System: Financial Drama
+## Overview
 
-## 1. Visual Theme & Atmosphere
+Warm Financial Drama is a compact finance interface for tracking personal money stories framed as mistakes (expenses) and blessings (incomes). It defaults to light mode — warm off-white backgrounds, pure white cards, and warm dark text — with a dark mode available through the `.dark` class. Restrained borders and a warm neutral palette make balances, recurring obligations, and analytics feel immediate and reflective.
 
-Financial Drama is a compact, dark, ledger-like mobile finance interface. It uses a near-black cool canvas, charcoal panels, pale ink text, and very restrained borders to make balances, expenses, recurring obligations, and analytics feel immediate without becoming visually noisy.
+The mood is grounded and slightly emotional — warm brown-toned neutrals replace cold slate, while rich crimson marks genuine regret and vibrant emerald celebrates true fortune. Square edges, dense rows, and subtle interaction states create a pocket ledger for daily financial accountability. Emphasis is carried by typography weight, semantic color, and thin rings rather than decoration.
 
-The mood is utilitarian and slightly severe: square component edges, small type, dense rows, and subtle interaction states create the feeling of a pocket control panel for daily financial accountability. The system favors scan speed over decoration, with emphasis carried by typography weight, numeric color, and thin rings rather than large illustrations or spacious marketing compositions.
+## Colors
 
-## 2. Color Palette & Roles
+The palette is rooted in warm neutrals with two semantic drivers — mistake and blessing. The app defaults to **light mode** (root element uses `className="light"`). Dark mode is available via the `.dark` class switch.
 
-### Primary Foundation
+### Light Mode (Default)
 
-**Ledger Black** `#090b0c` is the active app background because the root document applies the dark theme globally. It should cover full-screen app surfaces and scrolling route backgrounds.
+- **Background** `oklch(0.98 0.004 80)` — Warm off-white. Full-screen app surfaces and scrolling route backgrounds.
+- **Foreground** `oklch(0.15 0.006 55)` — Warm near-black. Body text, headings, card content.
+- **Card** `oklch(1 0 0)` — Pure white. Cards, popovers, navigation, elevated content.
+- **Primary** `oklch(0.17 0.008 55)` — Warm dark. Primary action fill and interactive accents.
+- **Destructive / Mistake** `oklch(0.60 0.20 25)` — Warm crimson. Expense amounts, validation errors.
+- **Blessing** `oklch(0.55 0.15 155)` — Warm emerald. Income amounts, positive cash flow.
+- **Warning** `oklch(0.70 0.14 75)` — Warm gold. Overdue items, warning icons.
+- **Border** `oklch(0.88 0.006 80)` — Warm light gray. Hairline boundaries.
 
-**Charcoal Panel** `#161b1d` is the main card, popover, bottom navigation, and elevated content color. It separates content from the background with tonal contrast rather than bright outlines.
+### Dark Mode
 
-**Deep Slate Fill** `#22292b` is the secondary, muted, and accent surface. Use it for hover states, soft selected states, muted blocks, and inactive controls.
+Applied through the `.dark` class. All neutrals shift to warm brown-black tones while the semantic colors stay consistent:
 
-**Hairline White Border** `rgba(255,255,255,0.10)` and **Input Frost** `rgba(255,255,255,0.15)` define the dark theme boundary system. Borders should feel thin and technical.
+- **Background** `oklch(0.12 0.006 55)` — Warm near-black, like aged leather.
+- **Foreground** `oklch(0.96 0.008 80)` — Warm cream.
+- **Card** `oklch(0.17 0.008 55)` — Warm dark charcoal.
+- **Primary** `oklch(0.90 0.012 80)` — Warm cream.
+- **Destructive / Mistake** `oklch(0.60 0.20 25)` — Same warm crimson.
+- **Blessing** `oklch(0.72 0.15 155)` — Slightly brighter warm emerald.
+- **Warning** `oklch(0.70 0.14 75)` — Same warm gold.
+- **Border** `oklch(0.96 0.008 80 / 8%)` — Subtle warm hairline.
+- **Input** `rgba(245,240,232,0.12)` — Slightly brighter warm frost for input boundaries.
+- **Ring** `#7a7068` — Warm focus ring. One-pixel or soft ring, not a large filled accent.
+- **Chart-1** `#e8504a` — Crimson for expense chart series.
+- **Chart-2** `#4cbf8a` — Emerald for income chart series.
+- **Chart-3** `#d4a04a` — Gold for warning/savings chart series.
+- **Chart-4** `#7a8aa8` — Muted steel blue for neutral chart series.
+- **Chart-5** `#c89050` — Copper for accent chart series.
 
-### Accent & Interactive
+## Typography
 
-**Pale Steel Primary** `#e3e7e8` is the primary action color in dark mode. It inverts the usual bright-brand approach by using a near-white fill against the black interface.
+Inter Variable is used for all text — its neutral, high-x-height character fits small financial labels, dense rows, currency values, and form controls.
 
-**Ink on Primary** `#161b1d` is used for text/icons inside primary buttons and the raised bottom-nav add button.
+- **Display** — 30px / 700 weight / 1.2 line height. Top-level page titles.
+- **Headline** — 24px / 700 weight / 1.333 line height. Section and detail page titles.
+- **Title** — 18px / 600 weight / 1.4 line height. Card titles and medium headings.
+- **Body** — 14px / 500 weight / 1.429 line height. Transaction labels, row content, controls.
+- **Caption** — 12px / 400 weight / 1.5 line height. Dates, metadata, supporting text.
+- **Label** — 12px / 600 weight / 0.1em letter spacing / uppercase. Section headers, form labels.
 
-**Focus Slate** `#67787c` is the ring and focus color. Use it as a one-pixel or soft ring, not as a large filled accent.
+Metric values use headline or title weight bold, colored by financial meaning: primary for neutral, destructive for expenses, blessing for income. Letter spacing remains neutral except for uppercase labels.
 
-**Route Blue** `#1447e6` appears only in the dark sidebar-primary token and is not prominent in the current mobile shell. Treat it as a reserved navigation accent, not the main brand color.
+## Layout
 
-### Typography & Text Hierarchy
+The app is mobile-first. Authenticated pages use full-width route containers with 16px side padding on mobile and 24px on wider screens. Vertical rhythm follows a 4px spacing scale with 24px section gaps, 8–12px list gaps, and 16px card padding.
 
-**Primary Text** `#f9fbfb` is used for body text, headings, card content, and high-priority labels.
+The home dashboard uses a single vertical stack with 24px gaps, two-column stat grids with 12px gaps, and compact list stacks. Forms center in a max-width content column. Authentication screens use a centered narrow card layout.
 
-**Muted Steel Text** `#9ca8ab` carries captions, secondary dates, form placeholders, inactive nav items, and section labels.
+Bottom navigation is a fixed 72px bar. Content reserves bottom padding for nav clearance. Whitespace is efficient rather than luxurious — dense financial content stays grouped in short stacks with headings close to their content.
 
-**Card Text** `#f9fbfb` stays consistent with foreground, keeping cards crisp against the charcoal background.
+## Elevation & Depth
 
-### Functional States
+Depth is achieved through tonal layers rather than shadows. Background uses warm near-black; cards sit on a slightly lighter warm charcoal panel separated by tonal contrast. The login card is the only elevated surface, using a subtle shadow. All other surfaces use hairline borders (`rgba(245,240,232,0.08)`) instead of drop shadows for separation.
 
-**Mistake Red** `#ff6467` is the destructive and expense color in the active dark theme. It marks negative balances, mistakes, validation errors, delete actions, and expense bars.
+## Shapes
 
-**Blessing Green** `#5dc879` is the design-token positive cash-flow color. Some routes also use Tailwind greens such as `#10b981` and green-600 for income, savings, and blessings; consolidate these as positive financial states.
+All interactive elements use minimal or zero corner radius. The system follows a square-edged language: `rounded-none` for cards, buttons, inputs, and containers. Only the raised bottom-nav add button uses `rounded-full`. This creates a technical, engineered feel appropriate for a financial ledger.
 
-**Overdue Amber** `#f59e0b` is used for overdue recurring items and warning icons/borders.
+- `none`: 0 — default for cards, buttons, inputs
+- `sm`: 0.375rem — compact controls
+- `md`: 0.5rem — subtle rounding where needed
+- `lg`: 0.625rem — larger containers
+- `full`: 9999px — reserved for the nav add button only
 
-**Chart Palette** uses higher-saturation accents for data differentiation: indigo `#6366f1`, amber `#f59e0b`, green `#10b981`, red `#ef4444`, blue `#3b82f6`, violet `#8b5cf6`, pink `#ec4899`, teal `#14b8a6`, orange `#f97316`, and lime `#a3e635`.
-
-## 3. Typography Rules
-
-### Hierarchy & Weights
-
-The app uses **Inter Variable** for all text through Tailwind's `--font-sans` and `--font-heading` tokens. Its neutral, high-x-height character fits small financial labels, dense rows, currency values, and form controls.
-
-Top-level app headings use `text-2xl` or `text-3xl` with `font-bold`. The home month title reaches `text-3xl`, while detail pages generally use `text-2xl`.
-
-Metric values use `text-xl` to `text-2xl` with `font-bold`, colored by financial meaning: primary for neutral balance, destructive for expenses, and green/blessing for income.
-
-Section headers are small but forceful: `text-xs`, `font-semibold`, uppercase, and `tracking-widest`. This creates a dashboard rhythm where sections can be scanned quickly without large headings.
-
-Rows and controls rely on `text-sm` and `text-xs`. Transaction labels are usually `text-sm font-medium`; dates and supporting metadata use `text-xs text-muted-foreground`.
-
-### Spacing Principles
-
-Letter spacing is mostly neutral, with intentional expansion reserved for uppercase section labels. Body copy and controls do not use decorative tracking.
-
-Line height is compact: controls use `text-xs`, cards use `text-xs/relaxed` by default, and captions use relaxed small text only where readability needs it.
-
-Currency values and percentages should be bold and visually isolated. Use color sparingly and let the number itself carry the emphasis.
-
-## 4. Component Stylings
+## Components
 
 ### Buttons
 
-Buttons are square-edged, compact, and text-small. The default height is `h-8`, large is `h-9`, small is `h-7`, and icon buttons range from `size-6` to `size-9`.
-
-Primary buttons use Pale Steel Primary fill with dark text and an `80%` hover tint. Outline buttons use transparent/dark input backgrounds, a border token, and a muted hover fill. Destructive buttons are deliberately soft, using red-tinted backgrounds with red text rather than a full red block except in confirmation flows.
-
-Focus states use `focus-visible:border-ring` and a thin ring. Active button presses translate down by one pixel, giving tactile feedback without animation-heavy motion.
+Square-edged and compact. Primary buttons use warm cream fill with dark text and an 80% hover tint. Destructive buttons use warm crimson fill. Outline buttons use transparent backgrounds with border token and muted hover fill. Focus states use a thin ring. Default height is 32px.
 
 ### Cards & Financial Containers
 
-Cards are flat charcoal panels with `rounded-none`, text-small defaults, and a one-pixel `ring-foreground/10`. Internal spacing is tokenized through `--card-spacing`, usually 16px and 12px for small cards.
-
-Dashboard stat cards use `px-4`, stacked labels, and bold values. Transaction rows often bypass the Card component and use the same visual recipe directly: `bg-card`, `ring-1`, horizontal flex, `px-4 py-3`, and hover `bg-accent/40`.
-
-The login card is the one place with stronger elevation (`shadow-2xl`) and a larger brand mark. In the authenticated app, elevation should stay subdued.
+Flat warm charcoal panels with no rounding, small text defaults, and a one-pixel hairline ring. Dashboard stat cards use horizontal padding, stacked labels, and bold values. Transaction rows use the same recipe directly: card background, hairline ring, horizontal flex layout, and hover accent.
 
 ### Navigation
 
-Navigation is a fixed mobile bottom bar: `72px` tall, charcoal background, top border, five evenly distributed actions, and 24px horizontal padding.
-
-Inactive navigation items use muted text and 22px lucide icons. Active items switch to primary text. The center add action is a raised circular `56px` button with primary fill, primary foreground icon, a card-colored ring, and a slight upward translation.
-
-Use lucide icons for navigation and utility actions. Icon-only actions should have compact hit areas but visible hover/opacity feedback.
+Fixed mobile bottom bar at 72px tall. Five evenly distributed actions with 24px horizontal padding. Inactive items use muted text and 22px icons; active items switch to primary text. The center add action is a raised 56px circular button with primary fill and primary foreground icon.
 
 ### Inputs & Forms
 
-Inputs, selects, textareas, checkboxes, and most form controls are square-edged with transparent or dark input backgrounds. Standard inputs are `h-8`, `text-xs`, `px-2.5`, and a one-pixel border.
+Square-edged with dark background and warm input border. Standard inputs are 32px tall with small text. Labels are compact and sit close to controls. Validation states use destructive borders and rings. The money input preserves the same styling with finance-specific numeral formatting.
 
-Labels are `text-xs` with tight leading and sit close to controls. Form sections stack vertically with `gap-2`, while full forms use `gap-5` or `gap-6` to separate fields.
+### Financial Drama Entries
 
-Validation states use destructive borders and rings. Error messages are small red text. The money input preserves the same input styling while formatting numerals for finance-specific entry.
+Dense three-column rows: category left, date centered, amount right. Amount uses warm crimson for mistakes and warm emerald for blessings. Recurring items follow the same pattern with metadata. Analytics cards contain compact Recharts visualizations with small axis ticks, muted gridlines, and rounded bar tops.
 
-### Financial Drama Components
+## Do's and Don'ts
 
-Mistake and blessing entries are dense three-column rows: category left, date centered, amount right. The amount is the main signal, using destructive red for mistakes and green/blessing for income.
-
-Recurring items use the same compact row pattern with a name, frequency/due date metadata, and a right-aligned amount. Overdue recurring cards add an amber icon and amber-tinted border.
-
-Analytics cards contain compact Recharts visualizations with small axis ticks, muted gridlines, circular legends, and rounded bar tops. Charts should stay contained in flat cards and avoid decorative gradients.
-
-## 5. Layout Principles
-
-### Grid & Structure
-
-The product is mobile-first. Authenticated pages use full-width route containers with `px-4`, `py-6`, `pb-20`, and `h-[calc(100dvh-72px)]` when paired with the bottom nav.
-
-The home dashboard uses a single vertical stack with `gap-6`, two-column stat grids with `gap-3`, and compact list stacks with `gap-2` or `gap-3`.
-
-Forms for creating and editing financial drama are centered in a `max-w-2xl` content column with `px-4` on mobile and `md:px-8` on larger screens.
-
-Authentication screens use a centered `max-w-sm` card layout, keeping sign-in and sign-up intentionally narrow and focused.
-
-### Whitespace Strategy
-
-The spacing scale follows Tailwind's 4px rhythm. Common page margins are 16px on mobile and 24px or 32px on wider screens. Section gaps are usually 24px, list gaps are 8px to 12px, and card padding is usually 16px.
-
-Whitespace is efficient rather than luxurious. Dense financial content should remain grouped in short stacks, with headings close enough to their content to preserve context.
-
-### Alignment & Visual Balance
-
-The app is mostly left-aligned, with numeric values right-aligned when they appear in lists. Stat cards use stacked label/value alignment for fast scanning.
-
-Transaction rows distribute category, date, and amount across equal flex areas. This creates a ledger-like rhythm where dates and amounts can be compared quickly.
-
-Charts use full-width responsive containers inside cards. Axis labels and legends stay small to keep the data shape dominant.
-
-### Responsive Behavior & Touch
-
-The app prioritizes phone screens. Bottom navigation remains fixed, content reserves bottom padding, and major workflows fit into vertical scrolling pages.
-
-Tablet and desktop adjustments are modest: page padding increases, form pages gain a max width, and some sections keep the same one-column rhythm instead of becoming complex desktop dashboards.
-
-Touch targets vary: the central add button is large at 56px, while dense form controls are 32px to 36px tall. When generating new screens, keep primary actions full-width on mobile and reserve compact controls for secondary actions or dense rows.
-
-## 6. Design System Notes for Stitch Generation
-
-### Language to Use
-
-Use language like "compact dark finance dashboard", "square-edged shadcn Base UI", "charcoal panels with hairline rings", "small uppercase section labels", "mobile-first bottom navigation", and "ledger-like transaction rows".
-
-Avoid marketing hero styling, large decorative cards, oversized rounded corners, soft beige palettes, and colorful gradients. This product should feel practical, direct, and easy to scan repeatedly.
-
-### Color References
-
-Use Ledger Black `#090b0c` for app backgrounds, Charcoal Panel `#161b1d` for cards/nav/popovers, Deep Slate Fill `#22292b` for hover and secondary surfaces, Pale Steel Primary `#e3e7e8` for primary actions, Muted Steel Text `#9ca8ab` for secondary text, Mistake Red `#ff6467` for losses/errors, Blessing Green `#5dc879` for positive cash flow, and Overdue Amber `#f59e0b` for warnings.
-
-### Component Prompts
-
-Create a mobile finance dashboard screen with a dark ledger background, compact Inter typography, square charcoal stat cards, uppercase section labels, two-column metric grids, dense transaction rows, red expense amounts, green income amounts, and a fixed bottom navigation with a raised circular add button.
-
-Create a financial-drama entry form using square shadcn-style inputs, compact labels, radio controls for Mistake versus Blessing, a money input, date picker trigger, category select, optional account select, planned checkbox, notes textarea, and a full-width primary submit button.
-
-Create an analytics view with flat charcoal chart cards, tiny muted axis labels, hairline gridlines, red and green bar charts for expenses and income, and a category pie chart using saturated chart accents while keeping the surrounding interface monochrome.
-
-### Incremental Iteration
-
-When adding new screens, start from the mobile route container: 16px side padding, 24px vertical rhythm, bottom padding for the nav, and square charcoal cards. Add color only when it communicates financial meaning, state, or chart grouping.
-
-If a screen feels too decorative, reduce radius to zero, remove heavy shadows, shrink headings to the existing scale, and return emphasis to labels, values, borders, and state colors.
+- Do use semantic color only when it communicates financial meaning — crimson for expenses, emerald for income, gold for warnings.
+- Do keep radius at zero for all interactive elements and cards.
+- Don't mix warm and cool neutrals in the same view — all surfaces use brown-toned grays.
+- Don't use drop shadows in the authenticated app; rely on tonal contrast and hairline borders.
+- Don't use `text-green-600`, `text-red-600`, or hardcoded Tailwind greens/reds — always use the `text-blessing`, `text-destructive`, `text-mistake`, or `text-warning` design tokens.
+- Do maintain compact spacing: 4px unit rhythm, 16px page margins, 24px section gaps.
+- Do prefer Inter Variable at small sizes (12–14px body) with weight carrying hierarchy instead of size.
+- Don't add decorative gradients, large illustrations, or spacious marketing layouts.
+- Do default to light mode — the root `<html>` element uses `className="light"`. Reserve dark mode for user preference toggles via the `.dark` class.
+- Do start new screens from the mobile container pattern: 16px padding, 24px vertical rhythm, bottom nav clearance.

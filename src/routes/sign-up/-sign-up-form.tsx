@@ -58,10 +58,10 @@ export function SignUpForm() {
           type="text"
           placeholder="Username"
           {...register("username")}
-          className={formState.errors.username ? "border-red-500" : ""}
+          className={formState.errors.username ? "border-destructive" : ""}
         />
         {formState.errors.username && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.username.message}
           </p>
         )}
@@ -76,10 +76,10 @@ export function SignUpForm() {
           type="text"
           placeholder="Full name"
           {...register("name")}
-          className={formState.errors.name ? "border-red-500" : ""}
+          className={formState.errors.name ? "border-destructive" : ""}
         />
         {formState.errors.name && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.name.message}
           </p>
         )}
@@ -94,10 +94,10 @@ export function SignUpForm() {
           type="password"
           placeholder="••••••••"
           {...register("password")}
-          className={formState.errors.password ? "border-red-500" : ""}
+          className={formState.errors.password ? "border-destructive" : ""}
         />
         {formState.errors.password && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.password.message}
           </p>
         )}
@@ -115,18 +115,18 @@ export function SignUpForm() {
           type="password"
           placeholder="••••••••"
           {...register("confirmPassword")}
-          className={formState.errors.confirmPassword ? "border-red-500" : ""}
+          className={formState.errors.confirmPassword ? "border-destructive" : ""}
         />
         {formState.errors.confirmPassword && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.confirmPassword.message}
           </p>
         )}
       </div>
 
       {signUpErrors && (
-        <div className="p-3 rounded-md bg-red-50 border-l-4 border-red-500">
-          <p className="text-red-700 text-sm">{signUpErrors}</p>
+        <div className="p-3 rounded-md bg-destructive/10 border-l-4 border-destructive">
+          <p className="text-destructive text-sm">{signUpErrors}</p>
         </div>
       )}
 

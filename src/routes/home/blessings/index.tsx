@@ -110,7 +110,7 @@ function AllBlessingsPage() {
                   }).format(new Date(blessing.date))}
                 </span>
               </div>
-              <span className="text-sm font-semibold text-green-600 whitespace-nowrap">
+              <span className="text-sm font-semibold text-blessing whitespace-nowrap">
                 +
                 {new Intl.NumberFormat("en-PH", {
                   style: "currency",

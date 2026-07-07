@@ -20,11 +20,11 @@ import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 
 const CATEGORY_COLORS = [
-  "#6366f1",
-  "#f59e0b",
-  "#10b981",
-  "#ef4444",
-  "#3b82f6",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-5))",
   "#8b5cf6",
   "#ec4899",
   "#14b8a6",
@@ -155,7 +155,7 @@ function AnalyticsPage() {
               Savings Rate (6 mo avg)
             </span>
             <span
-              className={`text-lg font-bold ${Number(savingsRate) >= 0 ? "text-green-500" : "text-destructive"}`}
+              className={`text-lg font-bold ${Number(savingsRate) >= 0 ? "text-blessing" : "text-destructive"}`}
             >
               {savingsRate}%
             </span>
@@ -212,7 +212,7 @@ function AnalyticsPage() {
                   <Bar
                     dataKey="expense"
                     name="Expenses"
-                    fill="#ef4444"
+                    fill="hsl(var(--mistake))"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -276,13 +276,13 @@ function AnalyticsPage() {
                   <Bar
                     dataKey="income"
                     name="Income"
-                    fill="#10b981"
+                    fill="hsl(var(--blessing))"
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="expense"
                     name="Expenses"
-                    fill="#ef4444"
+                    fill="hsl(var(--mistake))"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -404,8 +404,8 @@ function AnalyticsPage() {
                         key={`cell-${d.month}`}
                         fill={
                           d.income > 0 && d.income - d.expense >= 0
-                            ? "#10b981"
-                            : "#ef4444"
+                            ? "hsl(var(--blessing))"
+                            : "hsl(var(--mistake))"
                         }
                       />
                     ))}

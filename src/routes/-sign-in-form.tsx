@@ -56,10 +56,10 @@ export function SignInForm() {
           type="text"
           placeholder="Username"
           {...register("username")}
-          className={formState.errors.username ? "border-red-500" : ""}
+          className={formState.errors.username ? "border-destructive" : ""}
         />
         {formState.errors.username && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.username.message}
           </p>
         )}
@@ -74,16 +74,16 @@ export function SignInForm() {
           type="password"
           placeholder="••••••••"
           {...register("password")}
-          className={formState.errors.password ? "border-red-500" : ""}
+          className={formState.errors.password ? "border-destructive" : ""}
         />
         {formState.errors.password && (
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-destructive text-sm mt-1">
             {formState.errors.password.message}
           </p>
         )}
       </div>
 
-      {signInError && <p className="text-red-600 text-sm">{signInError}</p>}
+      {signInError && <p className="text-destructive text-sm">{signInError}</p>}
 
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Signing in..." : "Sign in"}

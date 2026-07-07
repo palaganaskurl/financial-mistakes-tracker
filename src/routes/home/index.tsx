@@ -281,14 +281,14 @@ function HomePage() {
         {overdueRecurring.length > 0 && (
           <div className="flex flex-col gap-3">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-              <AlertCircle size={12} className="text-amber-500" />
+              <AlertCircle size={12} className="text-warning" />
               Overdue
             </h2>
             <div className="flex flex-col gap-2">
               {overdueRecurring.map((item) => (
                 <Card
                   key={item.id}
-                  className="px-4 py-3 flex-row items-center justify-between gap-3 border-amber-500/40"
+                  className="px-4 py-3 flex-row items-center justify-between gap-3 border-warning/40"
                 >
                   <div className="flex flex-col gap-0.5 min-w-0">
                     <span className="font-semibold text-sm truncate">
@@ -306,7 +306,7 @@ function HomePage() {
                     className={`text-sm font-bold shrink-0 ${
                       item.type === "mistake"
                         ? "text-destructive"
-                        : "text-green-600"
+                        : "text-blessing"
                     }`}
                   >
                     {item.type === "mistake" ? "-" : "+"}
@@ -357,7 +357,7 @@ function HomePage() {
                     </span>
                   </div>
                   <span
-                    className={`text-sm font-bold shrink-0 ${item.type === "mistake" ? "text-destructive" : "text-green-600"}`}
+                    className={`text-sm font-bold shrink-0 ${item.type === "mistake" ? "text-destructive" : "text-blessing"}`}
                   >
                     {item.type === "mistake" ? "-" : "+"}
                     {new Intl.NumberFormat("en-PH", {

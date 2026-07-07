@@ -90,7 +90,7 @@ function RecurringCard({
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <span
-          className={`text-sm font-bold ${item.type === "mistake" ? "text-destructive" : "text-green-600"}`}
+          className={`text-sm font-bold ${item.type === "mistake" ? "text-destructive" : "text-blessing"}`}
         >
           {item.type === "mistake" ? "-" : "+"}
           {formatCurrency(item.amount)}

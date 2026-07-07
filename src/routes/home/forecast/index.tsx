@@ -150,7 +150,7 @@ function ForecastCard({
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
             Expected Income
           </p>
-          <p className="text-lg font-bold text-green-600">
+          <p className="text-lg font-bold text-blessing">
             {formatCurrency(income)}
           </p>
         </Card>
@@ -170,7 +170,7 @@ function ForecastCard({
             Net Change
           </p>
           <p
-            className={`text-lg font-bold ${net >= 0 ? "text-green-600" : "text-destructive"}`}
+            className={`text-lg font-bold ${net >= 0 ? "text-blessing" : "text-destructive"}`}
           >
             {net >= 0 ? "+" : ""}
             {formatCurrency(net)}
@@ -210,7 +210,7 @@ function ForecastCard({
                       {count > 1 ? ` × ${count}` : ""}
                     </span>
                   </div>
-                  <span className="text-sm font-bold text-green-600 shrink-0">
+                  <span className="text-sm font-bold text-blessing shrink-0">
                     +{formatCurrency(total)}
                   </span>
                 </Card>
