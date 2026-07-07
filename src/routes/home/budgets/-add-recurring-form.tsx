@@ -127,7 +127,7 @@ export default function AddRecurringForm({
       if (onSuccess) {
         setTimeout(() => onSuccess(), 800);
       } else {
-        setTimeout(() => navigate({ to: "/home/recurring" }), 800);
+        setTimeout(() => navigate({ to: "/home/budgets" }), 800);
       }
     } catch {
       toast.error(isEditMode ? "Failed to update." : "Failed to add.");

@@ -238,20 +238,12 @@ function HomePage() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Link
-            to="/home/accounts"
-            className="flex items-center justify-center py-3 bg-card ring-1 ring-foreground/10 text-sm font-medium hover:bg-muted transition-colors"
-          >
-            Accounts
-          </Link>
-          <Link
-            to="/home/forecast"
-            className="flex items-center justify-center py-3 bg-card ring-1 ring-foreground/10 text-sm font-medium hover:bg-muted transition-colors"
-          >
-            Forecast
-          </Link>
-        </div>
+        <Link
+          to="/home/forecast"
+          className="flex items-center justify-center py-3 bg-card ring-1 ring-foreground/10 text-sm font-medium hover:bg-muted transition-colors"
+        >
+          Forecast
+        </Link>
 
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
@@ -334,7 +326,7 @@ function HomePage() {
                 Upcoming (Next 7 Days)
               </h2>
               <Link
-                to="/home/recurring"
+                to="/home/budgets"
                 className="text-xs text-primary hover:underline"
               >
                 View All
