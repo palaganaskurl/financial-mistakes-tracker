@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import type { z } from "zod";
 import { addRecurring } from "@/actions/add-recurring";
 import { updateRecurring } from "@/actions/update-recurring";
@@ -125,9 +125,9 @@ export default function AddRecurringForm({
       }
 
       if (onSuccess) {
-        setTimeout(() => onSuccess(), 800);
+        onSuccess();
       } else {
-        setTimeout(() => navigate({ to: "/home/budgets" }), 800);
+        navigate({ to: "/home/budgets" });
       }
     } catch {
       toast.error(isEditMode ? "Failed to update." : "Failed to add.");
@@ -397,7 +397,6 @@ export default function AddRecurringForm({
           </Button>
         </div>
       </form>
-      <Toaster />
     </>
   );
 }

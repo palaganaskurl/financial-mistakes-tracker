@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import type { z } from "zod";
 import { addMistake } from "@/actions/add-mistake";
 import { updateFinancialDrama } from "@/actions/update-financial-drama";
@@ -127,7 +127,7 @@ export default function AddFinancialDramaForm({
         await addMistake({ data: payload });
         toast.success("Successfully added financial drama!");
       }
-      setTimeout(() => navigate({ to: "/home" }), 1000);
+      navigate({ to: "/home" });
     } catch {
       toast.error(
         isEditMode ? "Failed to update." : "Failed to add financial drama.",
@@ -357,7 +357,6 @@ export default function AddFinancialDramaForm({
           </Button>
         </div>
       </form>
-      <Toaster />
     </>
   );
 }
