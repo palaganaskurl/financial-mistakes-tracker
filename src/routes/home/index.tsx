@@ -213,7 +213,7 @@ function HomePage() {
       <div className="flex flex-col gap-6 py-6">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
-            Financial Journal
+            Financial Drama
           </p>
           <h1 className="text-3xl font-bold tracking-tight">
             {currentMonth}{" "}
