@@ -5,3 +5,4 @@ DROP TABLE IF EXISTS recurring;
 DROP TABLE IF EXISTS budgets;
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS __drizzle_migrations;
+DELETE FROM d1_migrations;

@@ -25,8 +25,10 @@
     "wrangler-migrations": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --local",
     "wrangler-migrations-remote": "wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote",
     "db:truncate:local": "wrangler d1 execute financial-mistakes-tracker-d1 --local --file scripts/truncate.sql && wrangler d1 migrations apply financial-mistakes-tracker-d1 --local",
-    "db:reset:local": "npm run db:truncate:local && npm run wrangler-migrations",
-    "db:truncate:prod": "wrangler d1 execute financial-mistakes-tracker-d1 --remote --file scripts/truncate.sql && wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote"
+    "db:reset:local": "npm run db:truncate:local && npm run wrangler-migrations && npm run db:seed:local",
+    "db:truncate:prod": "wrangler d1 execute financial-mistakes-tracker-d1 --remote --file scripts/truncate.sql && wrangler d1 migrations apply financial-mistakes-tracker-d1 --remote",
+    "db:seed:local": "tsx scripts/seed.ts --local",
+    "db:seed:remote": "tsx scripts/seed.ts --remote"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
