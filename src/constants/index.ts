@@ -97,7 +97,7 @@ export const FinancialDramaFormSchema = z
       .nonempty({ message: "Please select a category." }),
     is_planned: z.boolean().default(true).optional(),
     notes: z.coerce.string().optional(),
-    blessings_account_id: z.coerce
+    account_id: z.coerce
       .string({
         message: "Please select an account.",
       })
@@ -120,12 +120,11 @@ export const FinancialDramaFormSchema = z
       });
     }
 
-    // Require blessings_account_id when type is blessing
-    if (data.type === "blessing" && !data.blessings_account_id) {
+    if (!data.account_id) {
       ctx.addIssue({
-        path: ["blessings_account_id"],
+        path: ["account_id"],
         code: "custom",
-        message: "Please select an account for blessings.",
+        message: "Please select an account.",
       });
     }
   });

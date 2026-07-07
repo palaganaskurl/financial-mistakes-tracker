@@ -67,7 +67,7 @@ function EditFinancialDramaPage() {
               category: entry.category,
               is_planned: entry.is_planned,
               notes: entry.notes,
-              blessings_account_id: entry.blessings_account_id,
+              account_id: entry.account_id,
             }}
           />
         </div>

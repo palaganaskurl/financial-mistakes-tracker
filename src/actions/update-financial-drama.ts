@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
+import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 
@@ -12,7 +13,7 @@ const UpdateFinancialDramaSchema = z.object({
   category: z.string().min(1),
   is_planned: z.boolean().default(true),
   notes: z.string().optional(),
-  blessings_account_id: z.string().optional(),
+  account_id: z.string().optional(),
 });
 
 export const updateFinancialDrama = createServerFn({ method: "POST" })
@@ -25,6 +26,35 @@ export const updateFinancialDrama = createServerFn({ method: "POST" })
     if (!userId) throw new Error("Unauthorized");
 
     const db = getDb(context);
+
+    const [existing] = await db
+      .select()
+      .from(financialDramaTable)
+      .where(
+        and(
+          eq(financialDramaTable.id, data.id),
+          eq(financialDramaTable.user_id, userId),
+        ),
+      );
+
+    if (!existing) throw new Error("Financial drama not found");
+
+    // Reverse old account balance effect
+    if (existing.account_id) {
+      if (existing.type === "blessing") {
+        await db
+          .update(accountsTable)
+          .set({ balance: sql`${accountsTable.balance} - ${existing.amount}` })
+          .where(eq(accountsTable.id, existing.account_id));
+      } else {
+        await db
+          .update(accountsTable)
+          .set({ balance: sql`${accountsTable.balance} + ${existing.amount}` })
+          .where(eq(accountsTable.id, existing.account_id));
+      }
+    }
+
+    // Update the record
     await db
       .update(financialDramaTable)
       .set({
@@ -34,7 +64,7 @@ export const updateFinancialDrama = createServerFn({ method: "POST" })
         category: data.category,
         is_planned: data.is_planned,
         notes: data.notes,
-        blessings_account_id: data.blessings_account_id ?? null,
+        account_id: data.account_id ?? null,
         date_updated: new Date(),
       })
       .where(
@@ -43,6 +73,21 @@ export const updateFinancialDrama = createServerFn({ method: "POST" })
           eq(financialDramaTable.user_id, userId),
         ),
       );
+
+    // Apply new account balance effect
+    if (data.account_id) {
+      if (data.type === "blessing") {
+        await db
+          .update(accountsTable)
+          .set({ balance: sql`${accountsTable.balance} + ${data.amount}` })
+          .where(eq(accountsTable.id, data.account_id));
+      } else {
+        await db
+          .update(accountsTable)
+          .set({ balance: sql`${accountsTable.balance} - ${data.amount}` })
+          .where(eq(accountsTable.id, data.account_id));
+      }
+    }
 
     return { success: true };
   });

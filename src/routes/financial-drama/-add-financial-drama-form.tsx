@@ -50,7 +50,7 @@ interface InitialData {
   category: string;
   is_planned: boolean;
   notes?: string | null;
-  blessings_account_id?: string | null;
+  account_id?: string | null;
 }
 
 export default function AddFinancialDramaForm({
@@ -79,8 +79,8 @@ export default function AddFinancialDramaForm({
           is_planned: initialData.is_planned,
           notes: initialData.notes ?? "",
           category: [initialData.category],
-          blessings_account_id: initialData.blessings_account_id
-            ? [initialData.blessings_account_id]
+          account_id: initialData.account_id
+            ? [initialData.account_id]
             : undefined,
         }
       : {
@@ -115,7 +115,7 @@ export default function AddFinancialDramaForm({
         category: values.category[0],
         is_planned: values.is_planned ?? true,
         notes: values.notes,
-        blessings_account_id: values.blessings_account_id?.[0],
+        account_id: values.account_id?.[0],
       };
 
       if (isEditMode && initialData) {
@@ -276,50 +276,48 @@ export default function AddFinancialDramaForm({
             )}
           </div>
 
-          {currentType === "blessing" && (
-            <div className="flex flex-col gap-2">
-              <Label>Account</Label>
-              <Controller
-                name="blessings_account_id"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    value={field.value?.[0] ?? ""}
-                    onValueChange={(val) => field.onChange([val])}
-                  >
-                    <SelectTrigger type="button" className="w-full">
-                      <SelectValue placeholder="Select Account">
-                        {(value) =>
-                          accounts.find((a) => a.id.toString() === value)
-                            ?.name ?? "Select Account"
+          <div className="flex flex-col gap-2">
+            <Label>Account</Label>
+            <Controller
+              name="account_id"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value?.[0] ?? ""}
+                  onValueChange={(val) => field.onChange([val])}
+                >
+                  <SelectTrigger type="button" className="w-full">
+                    <SelectValue placeholder="Select Account">
+                      {(value) =>
+                        accounts.find((a) => a.id.toString() === value)
+                          ?.name ?? "Select Account"
+                      }
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent alignItemWithTrigger={false}>
+                    {accounts.map((account) => (
+                      <SelectItem
+                        key={account.id}
+                        value={account.id.toString()}
+                      >
+                        {account.name} -{" "}
+                        {
+                          AccountsTypesMap[
+                            account.type as keyof typeof AccountsTypesMap
+                          ]
                         }
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent alignItemWithTrigger={false}>
-                      {accounts.map((account) => (
-                        <SelectItem
-                          key={account.id}
-                          value={account.id.toString()}
-                        >
-                          {account.name} -{" "}
-                          {
-                            AccountsTypesMap[
-                              account.type as keyof typeof AccountsTypesMap
-                            ]
-                          }
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {formState.errors.blessings_account_id && (
-                <p className="text-sm text-destructive">
-                  {formState.errors.blessings_account_id.message}
-                </p>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               )}
-            </div>
-          )}
+            />
+            {formState.errors.account_id && (
+              <p className="text-sm text-destructive">
+                {formState.errors.account_id.message}
+              </p>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             <Controller

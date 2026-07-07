@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS financialDrama;
 DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS transfers;
+DROP TABLE IF EXISTS recurring;
+DROP TABLE IF EXISTS budgets;
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS __drizzle_migrations;

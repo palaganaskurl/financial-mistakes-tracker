@@ -27,10 +27,10 @@ export const financialDramaTable = sqliteTable("financialDrama", {
   user_id: text("user_id")
     .references(() => authSchema.user.id, { onDelete: "cascade" })
     .notNull(),
-  blessings_account_id: text("blessings_account_id").references(
-    () => accountsTable.id,
-    { onDelete: "set null" },
-  ),
+	account_id: text("account_id").references(
+		() => accountsTable.id,
+		{ onDelete: "set null" },
+	),
 });
 
 export const schema = {
