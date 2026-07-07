@@ -69,7 +69,7 @@ function AllMistakesPage() {
 
   return (
     <div className="w-full px-4 md:px-6 pb-20 md:pb-6">
-      <div className="flex flex-col gap-6 py-6">
+      <div className="flex flex-col gap-4 py-6">
         <div className="flex items-center gap-3">
           <Link to="/home">
             <button
@@ -94,43 +94,63 @@ function AllMistakesPage() {
           </Card>
         )}
 
-        <div className="flex flex-col gap-3">
-          {mistakes.map((mistake) => (
-            <div
-              key={mistake.id}
-              className="flex items-center gap-2 p-3 ring-1 ring-foreground/10"
-            >
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="text-sm font-medium">
-                  {MistakeCategoryToLabelMap[mistake.category]}
-                </span>
-                <span className="text-xs text-muted-foreground">
+        <div className="flex flex-col gap-6">
+          {(() => {
+            const grouped = mistakes.reduce<Record<string, typeof mistakes>>(
+              (acc, mistake) => {
+                if (!acc[mistake.date]) {
+                  acc[mistake.date] = [];
+                }
+                acc[mistake.date].push(mistake);
+                return acc;
+              },
+              {},
+            );
+
+            return Object.entries(grouped).map(([date, items]) => (
+              <div key={date}>
+                <h3 className="text-sm font-semibold text-muted-foreground mb-2">
                   {new Intl.DateTimeFormat("en-PH", {
-                    dateStyle: "medium",
-                  }).format(new Date(mistake.date))}
-                </span>
+                    dateStyle: "full",
+                  }).format(new Date(date))}
+                </h3>
+                <div className="flex flex-col gap-3">
+                  {items.map((mistake) => (
+                    <div
+                      key={mistake.id}
+                      className="flex items-center gap-2 p-3 ring-1 ring-foreground/10"
+                    >
+                      <span className="text-sm flex-1 font-medium min-w-0">
+                        {MistakeCategoryToLabelMap[mistake.category]}
+                      </span>
+                      <span className="text-sm font-semibold text-destructive whitespace-nowrap">
+                        -
+                        {new Intl.NumberFormat("en-PH", {
+                          style: "currency",
+                          currency: "PHP",
+                        }).format(mistake.amount)}
+                      </span>
+                      <Link
+                        to="/financial-drama/$id"
+                        params={{ id: mistake.id }}
+                      >
+                        <button
+                          type="button"
+                          className="p-1.5 hover:opacity-70 transition-opacity text-muted-foreground"
+                        >
+                          <Pencil size={15} />
+                        </button>
+                      </Link>
+                      <DeleteConfirmDialog
+                        onConfirm={() => handleDelete(mistake.id)}
+                        disabled={deletingId === mistake.id}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <span className="text-sm font-semibold text-destructive whitespace-nowrap">
-                -
-                {new Intl.NumberFormat("en-PH", {
-                  style: "currency",
-                  currency: "PHP",
-                }).format(mistake.amount)}
-              </span>
-              <Link to="/financial-drama/$id" params={{ id: mistake.id }}>
-                <button
-                  type="button"
-                  className="p-1.5 hover:opacity-70 transition-opacity text-muted-foreground"
-                >
-                  <Pencil size={15} />
-                </button>
-              </Link>
-              <DeleteConfirmDialog
-                onConfirm={() => handleDelete(mistake.id)}
-                disabled={deletingId === mistake.id}
-              />
-            </div>
-          ))}
+            ));
+          })()}
 
           {mistakes.length === 0 && (
             <p className="text-sm text-gray-500 text-center py-8">
