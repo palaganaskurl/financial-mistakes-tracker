@@ -23,6 +23,11 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
 
     const db = getDb(context);
 
+    const phtNow = new Date(Date.now() + 8 * 60 * 60 * 1000);
+    const todayStr = `${phtNow.getUTCFullYear()}-${String(
+      phtNow.getUTCMonth() + 1,
+    ).padStart(2, "0")}-${String(phtNow.getUTCDate()).padStart(2, "0")}`;
+
     const accountsResult = await db
       .select({ total: sum(accountsTable.balance) })
       .from(accountsTable)
@@ -36,7 +41,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         and(
           eq(financialDramaTable.type, "mistake"),
           eq(financialDramaTable.user_id, userId),
-          sql`strftime('%Y-%m', ${financialDramaTable.date}) = strftime('%Y-%m', 'now')`,
+          sql`strftime('%Y-%m', ${financialDramaTable.date}) = strftime('%Y-%m', ${todayStr})`,
         ),
       );
     const monthlyExpenses = Number(monthlyExpensesResult[0]?.total ?? 0);
@@ -48,7 +53,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         and(
           eq(financialDramaTable.type, "mistake"),
           eq(financialDramaTable.user_id, userId),
-          sql`${financialDramaTable.date} <= date('now')`,
+          sql`${financialDramaTable.date} <= ${todayStr}`,
         ),
       )
       .orderBy(desc(financialDramaTable.date))
@@ -61,7 +66,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         and(
           eq(financialDramaTable.type, "blessing"),
           eq(financialDramaTable.user_id, userId),
-          sql`${financialDramaTable.date} <= date('now')`,
+          sql`${financialDramaTable.date} <= ${todayStr}`,
         ),
       )
       .orderBy(desc(financialDramaTable.date))
@@ -130,8 +135,8 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
       .where(
         and(
           eq(financialDramaTable.user_id, userId),
-          sql`${financialDramaTable.date} >= date('now', '-366 days')`,
-          sql`${financialDramaTable.date} < date('now')`,
+          sql`${financialDramaTable.date} >= date(${todayStr}, '-366 days')`,
+          sql`${financialDramaTable.date} < ${todayStr}`,
         ),
       );
 
