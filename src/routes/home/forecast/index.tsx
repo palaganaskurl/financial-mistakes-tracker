@@ -1,7 +1,7 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, eq } from "drizzle-orm";
-import { ArrowLeft, TrendingDown, TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
@@ -291,23 +291,13 @@ function ForecastPage() {
   );
 
   return (
-    <div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
+    <div className="w-full px-4 md:px-6">
       <div className="flex flex-col gap-8 py-6">
-        <div className="flex items-center gap-3">
-          <Link to="/home">
-            <button
-              type="button"
-              className="p-1 hover:opacity-70 transition-opacity"
-            >
-              <ArrowLeft size={20} />
-            </button>
-          </Link>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Recurring
-            </p>
-            <h1 className="text-2xl font-bold tracking-tight">Forecast</h1>
-          </div>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Recurring
+          </p>
+          <h1 className="text-2xl font-bold tracking-tight">Forecast</h1>
         </div>
 
         <ForecastCard

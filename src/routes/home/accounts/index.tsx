@@ -1,12 +1,11 @@
 import {
   createFileRoute,
-  Link,
   redirect,
   useRouter,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { deleteAccount } from "@/actions/delete-account";
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog";
@@ -59,19 +58,9 @@ function AccountsPage() {
   }
 
   return (
-    <div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
+    <div className="w-full px-4 md:px-6">
       <div className="flex flex-col gap-6 py-6">
-        <div className="flex items-center gap-3">
-          <Link to="/home">
-            <button
-              type="button"
-              className="p-1 hover:opacity-70 transition-opacity"
-            >
-              <ArrowLeft size={24} />
-            </button>
-          </Link>
-          <h1 className="text-2xl font-bold">Accounts</h1>
-        </div>
+        <h1 className="text-2xl font-bold">Accounts</h1>
 
         <Card className="px-4">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">

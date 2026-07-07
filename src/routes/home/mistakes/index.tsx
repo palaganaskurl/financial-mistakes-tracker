@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { deleteFinancialDrama } from "@/actions/delete-financial-drama";
@@ -68,19 +68,9 @@ function AllMistakesPage() {
   }
 
   return (
-    <div className="w-full px-4 md:px-6 pb-20 md:pb-6">
+    <div className="w-full px-4 md:px-6">
       <div className="flex flex-col gap-4 py-6">
-        <div className="flex items-center gap-3">
-          <Link to="/home">
-            <button
-              type="button"
-              className="p-1 hover:opacity-70 transition-opacity"
-            >
-              <ArrowLeft size={20} />
-            </button>
-          </Link>
-          <h1 className="text-2xl font-bold">All Mistakes</h1>
-        </div>
+        <h1 className="text-2xl font-bold">All Mistakes</h1>
 
         {hasFilter && (
           <Card className="px-4">

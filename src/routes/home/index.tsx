@@ -209,7 +209,7 @@ function HomePage() {
   const currentYear = currentDate.getFullYear();
 
   return (
-    <div className="w-full px-4 md:px-6 pb-20 md:pb-6 h-[calc(100dvh-72px)] overflow-y-auto">
+    <div className="w-full px-4 md:px-6">
       <div className="flex flex-col gap-6 py-6">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
