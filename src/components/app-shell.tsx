@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { type ReactNode, useRef } from "react";
 import { AppBar } from "./app-bar";
 import { BottomNav } from "./bottom-nav";
 

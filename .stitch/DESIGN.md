@@ -76,6 +76,7 @@ rounded:
   sm: 0.375rem
   md: 0.5rem
   lg: 0.625rem
+  xl: 0.75rem
   full: 9999px
 
 spacing:
@@ -97,6 +98,13 @@ components:
     padding: 8px 16px
     height: 32px
     typography: '{typography.label}'
+  button-primary-lg:
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.primary-foreground}'
+    rounded: '{rounded.xl}'
+    padding: 16px 24px
+    height: 56px
+    typography: '{typography.body}'
   button-destructive:
     backgroundColor: '{colors.destructive}'
     textColor: '{colors.foreground}'
@@ -109,13 +117,26 @@ components:
     rounded: '{rounded.none}'
     padding: 16px
   input-default:
-    backgroundColor: '{colors.card}'
+    backgroundColor: '{colors.muted}'
     textColor: '{colors.foreground}'
-    borderColor: '{colors.input}'
-    rounded: '{rounded.none}'
-    padding: 8px 10px
-    height: 32px
+    borderColor: none
+    rounded: '{rounded.xl}'
+    padding: 16px 16px 16px 40px
+    height: 56px
+    typography: '{typography.title}'
+  select-default:
+    backgroundColor: '{colors.muted}'
+    textColor: '{colors.foreground}'
+    borderColor: none
+    rounded: '{rounded.xl}'
+    padding: 16px
     typography: '{typography.body}'
+  checkbox:
+    backgroundColor: '{colors.muted}'
+    checkedBackgroundColor: '{colors.primary}'
+    checkedTextColor: '{colors.primary-foreground}'
+    size: 20px
+    rounded: '{rounded.md}'
   nav-bottom:
     backgroundColor: '{colors.card}'
     height: 72px
@@ -194,19 +215,20 @@ Depth is achieved through tonal layers rather than shadows. Background uses warm
 
 ## Shapes
 
-All interactive elements use minimal or zero corner radius. The system follows a square-edged language: `rounded-none` for cards, buttons, inputs, and containers. Only the raised bottom-nav add button uses `rounded-full`. This creates a technical, engineered feel appropriate for a financial ledger.
+Cards and buttons follow a square-edged language (`rounded-none`), while inputs use generous rounding (`rounded-xl`) to feel approachable and touch-friendly. Only the raised bottom-nav add button uses `rounded-full`.
 
-- `none`: 0 — default for cards, buttons, inputs
+- `none`: 0 — cards, buttons, list rows
 - `sm`: 0.375rem — compact controls
 - `md`: 0.5rem — subtle rounding where needed
 - `lg`: 0.625rem — larger containers
+- `xl`: 0.75rem — inputs and form fields
 - `full`: 9999px — reserved for the nav add button only
 
 ## Components
 
 ### Buttons
 
-Square-edged and compact. Primary buttons use warm cream fill with dark text and an 80% hover tint. Destructive buttons use warm crimson fill. Outline buttons use transparent backgrounds with border token and muted hover fill. Focus states use a thin ring. Default height is 32px.
+Two sizes in use. Default buttons are square-edged (`rounded-none`), 32px tall, compact with small label text — used for inline actions, toolbars, and nav. Large buttons (`size="lg"`) are `rounded-xl`, 56px tall, `text-sm font-semibold` — used for primary form submission. Destructive buttons use warm crimson fill. Outline buttons use transparent backgrounds with border token and muted hover fill. Focus states use a `ring-2` focus ring.
 
 ### Cards & Financial Containers
 
@@ -218,7 +240,7 @@ Fixed mobile bottom bar at 72px tall. Five evenly distributed actions with 24px 
 
 ### Inputs & Forms
 
-Square-edged with dark background and warm input border. Standard inputs are 32px tall with small text. Labels are compact and sit close to controls. Validation states use destructive borders and rings. The money input preserves the same styling with finance-specific numeral formatting.
+Rounded (`rounded-xl`) with muted background and no border. Money inputs are 56px tall with headline-size text and a `₱` prefix absolutely positioned at `left-4`. Selects match the same pill-style: `rounded-xl`, borderless, `bg-muted`, padding-driven height. Checkboxes are `size-5` with `rounded-md` and a muted background. Standard text inputs and textareas follow the same rounding and borderless style. Labels are `text-xs font-semibold text-muted-foreground` and sit close to controls. On focus, inputs lift to `bg-card` with a `ring-2` focus ring. Validation states use destructive rings.
 
 ### Financial Drama Entries
 
@@ -227,7 +249,7 @@ Dense three-column rows: category left, date centered, amount right. Amount uses
 ## Do's and Don'ts
 
 - Do use semantic color only when it communicates financial meaning — crimson for expenses, emerald for income, gold for warnings.
-- Do keep radius at zero for all interactive elements and cards.
+- Do keep radius at zero for cards, buttons, and list rows. Use `rounded-xl` for inputs, selects, textareas, and the date picker trigger. Use `rounded-md` for checkboxes.
 - Don't mix warm and cool neutrals in the same view — all surfaces use brown-toned grays.
 - Don't use drop shadows in the authenticated app; rely on tonal contrast and hairline borders.
 - Don't use `text-green-600`, `text-red-600`, or hardcoded Tailwind greens/reds — always use the `text-blessing`, `text-destructive`, `text-mistake`, or `text-warning` design tokens.

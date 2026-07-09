@@ -6,7 +6,8 @@ import type {
   Ref,
 } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@base-ui/react/input";
+import { cn } from "@/lib/utils";
 
 type MoneyInputProps = Omit<
   ComponentProps<"input">,
@@ -14,6 +15,7 @@ type MoneyInputProps = Omit<
 > & {
   value?: number | null;
   onValueChange?: (value: number) => void;
+  className?: string;
 };
 
 function cleanMoneyValue(value: string) {
@@ -71,6 +73,7 @@ function MoneyInput({
   onBlur,
   ref,
   placeholder = "0",
+  className,
   ...props
 }: MoneyInputProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -110,17 +113,26 @@ function MoneyInput({
   }
 
   return (
-    <Input
-      {...props}
-      ref={(node) => setInputRefs(node, inputRef, ref)}
-      type="text"
-      inputMode="decimal"
-      pattern="[0-9,.]*"
-      placeholder={placeholder}
-      value={displayValue}
-      onChange={handleChange}
-      onBlur={handleBlur}
-    />
+    <div className="relative">
+      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-muted-foreground">
+        ₱
+      </span>
+      <Input
+        {...props}
+        ref={(node) => setInputRefs(node as HTMLInputElement | null, inputRef, ref)}
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9,.]*"
+        placeholder={placeholder}
+        value={displayValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={cn(
+          "w-full rounded-xl border-none bg-muted py-4 pl-10 pr-4 text-lg font-semibold text-foreground outline-none transition-all placeholder:text-muted-foreground focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring/50",
+          className,
+        )}
+      />
+    </div>
   );
 }
 
