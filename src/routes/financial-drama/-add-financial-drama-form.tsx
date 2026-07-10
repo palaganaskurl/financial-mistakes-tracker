@@ -145,7 +145,7 @@ export default function AddFinancialDramaForm({
             name="type"
             control={control}
             render={({ field }) => (
-              <div className="bg-muted rounded-xl flex items-center relative overflow-hidden h-14 p-[3px]">
+              <div className="bg-muted flex items-center relative overflow-hidden h-14 p-[3px]">
                 <div
                   className={cn(
                     "absolute top-[3px] bottom-[3px] left-[3px] w-1/2 bg-background rounded-lg transition-all duration-300 ease-in-out shadow-sm",

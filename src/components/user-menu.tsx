@@ -40,7 +40,7 @@ export function UserMenu() {
       <PopoverContent align="end" sideOffset={8}>
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 px-1 py-1.5">
-            <div className="flex size-7 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+            <div className="flex size-7 items-center justify-center bg-muted text-muted-foreground">
               <User size={14} />
             </div>
             <span className="text-sm font-medium">Account</span>
@@ -50,7 +50,7 @@ export function UserMenu() {
             type="button"
             onClick={handleSignOut}
             disabled={loggingOut}
-            className="flex items-center gap-2 px-1 py-1.5 text-sm text-destructive hover:bg-muted transition-colors rounded-xl disabled:opacity-50"
+            className="flex items-center gap-2 px-1 py-1.5 text-sm text-destructive hover:bg-muted transition-colors disabled:opacity-50"
           >
             <LogOut size={14} />
             {loggingOut ? "Signing out..." : "Sign Out"}

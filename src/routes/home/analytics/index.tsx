@@ -6,30 +6,30 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
-  Legend,
   Pie,
   PieChart,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { MistakeCategoryToLabelMap } from "@/constants";
 import { getDb } from "@/db/d1";
 import { financialDramaTable } from "@/db/schema";
 
-const CATEGORY_COLORS = [
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-5))",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
-  "#f97316",
-  "#a3e635",
+const CATEGORY_CHART_VARS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
 ];
 
 const getAnalyticsData = createServerFn({ method: "GET" }).handler(
@@ -116,13 +116,21 @@ function AnalyticsPage() {
     month: formatShortMonth(ym),
     income: vals.income,
     expense: vals.expense,
-    savings: vals.income - vals.expense,
   }));
 
-  const categoryChartData = categorySpending.map((c) => ({
+  const categoryChartData = categorySpending.map((c, i) => ({
     name: MistakeCategoryToLabelMap[c.category] ?? c.category,
+    key: c.category ?? `cat-${i}`,
     value: Number(c.total ?? 0),
+    fill: CATEGORY_CHART_VARS[i % CATEGORY_CHART_VARS.length],
   }));
+
+  const categoryChartConfig = {
+    value: { label: "Amount" },
+    ...Object.fromEntries(
+      categoryChartData.map((c) => [c.key, { label: c.name, color: c.fill }]),
+    ),
+  } satisfies ChartConfig;
 
   const totalIncome = monthlyChartData.reduce((s, r) => s + r.income, 0);
   const totalExpense = monthlyChartData.reduce((s, r) => s + r.expense, 0);
@@ -131,24 +139,33 @@ function AnalyticsPage() {
       ? (((totalIncome - totalExpense) / totalIncome) * 100).toFixed(1)
       : null;
 
-  const tooltipStyle = {
-    backgroundColor: "hsl(var(--card))",
-    border: "1px solid hsl(var(--border))",
-    borderRadius: 8,
-    color: "hsl(var(--foreground))",
-    fontSize: 12,
-  };
+  const expenseChartConfig = {
+    expense: { label: "Expenses", color: "var(--mistake)" },
+  } satisfies ChartConfig;
+
+  const incomeExpenseChartConfig = {
+    income: { label: "Income", color: "var(--blessing)" },
+    expense: { label: "Expenses", color: "var(--mistake)" },
+  } satisfies ChartConfig;
+
+  const savingsRateData = monthlyChartData.map((d) => ({
+    month: d.month,
+    rate:
+      d.income > 0
+        ? Number((((d.income - d.expense) / d.income) * 100).toFixed(1))
+        : 0,
+    positive: d.income > 0 && d.income - d.expense >= 0,
+  }));
+
+  const savingsRateChartConfig = {
+    rate: { label: "Savings Rate" },
+  } satisfies ChartConfig;
+
+  const axisTickProps = { fontSize: 10 };
 
   return (
     <div className="w-full px-4 md:px-6">
-      <div className="flex flex-col gap-6 py-6">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
-            Analytics
-          </p>
-          <h1 className="text-2xl font-bold">Overview</h1>
-        </div>
-
+      <div className="flex flex-col gap-6 py-8">
         {savingsRate !== null && (
           <Card className="px-4 py-3 flex-row items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">
@@ -174,30 +191,23 @@ function AnalyticsPage() {
             </Card>
           ) : (
             <Card className="px-2 py-4">
-              <ResponsiveContainer width="100%" height={200}>
+              <ChartContainer
+                config={expenseChartConfig}
+                className="h-[200px] w-full"
+              >
                 <BarChart
                   data={monthlyChartData}
                   margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="hsl(var(--border))"
-                    vertical={false}
-                  />
+                  <CartesianGrid vertical={false} />
                   <XAxis
                     dataKey="month"
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) =>
@@ -205,18 +215,20 @@ function AnalyticsPage() {
                     }
                     width={40}
                   />
-                  <Tooltip
-                    contentStyle={tooltipStyle}
-                    formatter={(v: number) => formatCurrency(v)}
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        formatter={(v) => formatCurrency(Number(v))}
+                      />
+                    }
                   />
                   <Bar
                     dataKey="expense"
-                    name="Expenses"
-                    fill="hsl(var(--mistake))"
+                    fill="var(--color-expense)"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </Card>
           )}
         </div>
@@ -233,30 +245,23 @@ function AnalyticsPage() {
             </Card>
           ) : (
             <Card className="px-2 py-4">
-              <ResponsiveContainer width="100%" height={200}>
+              <ChartContainer
+                config={incomeExpenseChartConfig}
+                className="h-[200px] w-full"
+              >
                 <BarChart
                   data={monthlyChartData}
                   margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="hsl(var(--border))"
-                    vertical={false}
-                  />
+                  <CartesianGrid vertical={false} />
                   <XAxis
                     dataKey="month"
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) =>
@@ -264,29 +269,26 @@ function AnalyticsPage() {
                     }
                     width={40}
                   />
-                  <Tooltip
-                    contentStyle={tooltipStyle}
-                    formatter={(v: number) => formatCurrency(v)}
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        formatter={(v) => formatCurrency(Number(v))}
+                      />
+                    }
                   />
-                  <Legend
-                    wrapperStyle={{ fontSize: 11 }}
-                    iconType="circle"
-                    iconSize={8}
-                  />
+                  <ChartLegend content={<ChartLegendContent />} />
                   <Bar
                     dataKey="income"
-                    name="Income"
-                    fill="hsl(var(--blessing))"
+                    fill="var(--color-income)"
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="expense"
-                    name="Expenses"
-                    fill="hsl(var(--mistake))"
+                    fill="var(--color-expense)"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </Card>
           )}
         </div>
@@ -303,7 +305,10 @@ function AnalyticsPage() {
             </Card>
           ) : (
             <Card className="px-2 py-4">
-              <ResponsiveContainer width="100%" height={220}>
+              <ChartContainer
+                config={categoryChartConfig}
+                className="h-[220px] w-full"
+              >
                 <PieChart>
                   <Pie
                     data={categoryChartData}
@@ -311,34 +316,29 @@ function AnalyticsPage() {
                     cy="50%"
                     outerRadius={80}
                     dataKey="value"
+                    nameKey="key"
                     label={false}
                   >
                     {categoryChartData.map((entry) => (
-                      <Cell
-                        key={`cell-${entry.name}`}
-                        fill={
-                          CATEGORY_COLORS[
-                            categoryChartData.indexOf(entry) %
-                              CATEGORY_COLORS.length
-                          ]
-                        }
-                      />
+                      <Cell key={`cell-${entry.key}`} fill={entry.fill} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    contentStyle={tooltipStyle}
-                    formatter={(v: number) => formatCurrency(v)}
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        nameKey="key"
+                        formatter={(v) => formatCurrency(Number(v))}
+                      />
+                    }
                   />
-                  <Legend
+                  <ChartLegend
+                    content={<ChartLegendContent nameKey="key" />}
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: 10, maxWidth: 120 }}
-                    iconType="circle"
-                    iconSize={8}
                   />
                 </PieChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </Card>
           )}
         </div>
@@ -355,63 +355,45 @@ function AnalyticsPage() {
             </Card>
           ) : (
             <Card className="px-2 py-4">
-              <ResponsiveContainer width="100%" height={180}>
+              <ChartContainer
+                config={savingsRateChartConfig}
+                className="h-[180px] w-full"
+              >
                 <BarChart
-                  data={monthlyChartData.map((d) => ({
-                    month: d.month,
-                    rate:
-                      d.income > 0
-                        ? Number(
-                            (((d.income - d.expense) / d.income) * 100).toFixed(
-                              1,
-                            ),
-                          )
-                        : 0,
-                  }))}
+                  data={savingsRateData}
                   margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="hsl(var(--border))"
-                    vertical={false}
-                  />
+                  <CartesianGrid vertical={false} />
                   <XAxis
                     dataKey="month"
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{
-                      fontSize: 10,
-                      fill: "hsl(var(--muted-foreground))",
-                    }}
+                    tick={axisTickProps}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) => `${v}%`}
                     width={36}
                   />
-                  <Tooltip
-                    contentStyle={tooltipStyle}
-                    formatter={(v: number) => [`${v}%`, "Savings Rate"]}
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        formatter={(v) => [`${Number(v)}%`]}
+                      />
+                    }
                   />
-                  <Bar dataKey="rate" name="Savings Rate" radius={[4, 4, 0, 0]}>
-                    {monthlyChartData.map((d) => (
+                  <Bar dataKey="rate" radius={[4, 4, 0, 0]}>
+                    {savingsRateData.map((d) => (
                       <Cell
                         key={`cell-${d.month}`}
-                        fill={
-                          d.income > 0 && d.income - d.expense >= 0
-                            ? "hsl(var(--blessing))"
-                            : "hsl(var(--mistake))"
-                        }
+                        fill={d.positive ? "var(--blessing)" : "var(--mistake)"}
                       />
                     ))}
                   </Bar>
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </Card>
           )}
         </div>
