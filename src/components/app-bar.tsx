@@ -19,7 +19,7 @@ const routeTitles: Record<string, string> = {
 function getTitle(routeId: string): string {
   if (routeId === "/financial-drama/$id") return "Edit Financial Drama";
 
-  return routeTitles[routeId] ?? "Financial Drama";
+  return routeTitles[routeId] ?? "Financial Dramas";
 }
 
 function shouldShowBack(routeId: string): boolean {

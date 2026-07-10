@@ -6,9 +6,8 @@ import { Card } from "@/components/ui/card";
 import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { financialDramaTable, recurringTable } from "@/db/schema";
-import BlessingsList from "./-blessings-list";
 import FinancialDramaSkeleton from "./-financial-drama-skeleton";
-import MistakesList from "./-mistakes-list";
+import RecentFinancialDramas from "./-recent-financial-dramas";
 
 const getHomeData = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
@@ -57,25 +56,11 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
       );
     const monthlyBlessings = Number(monthlyBlessingsResult[0]?.total ?? 0);
 
-    const mistakes = await db
+    const recentDramas = await db
       .select()
       .from(financialDramaTable)
       .where(
         and(
-          eq(financialDramaTable.type, "mistake"),
-          eq(financialDramaTable.user_id, userId),
-          sql`${financialDramaTable.date} <= ${todayStr}`,
-        ),
-      )
-      .orderBy(desc(financialDramaTable.date))
-      .limit(5);
-
-    const blessings = await db
-      .select()
-      .from(financialDramaTable)
-      .where(
-        and(
-          eq(financialDramaTable.type, "blessing"),
           eq(financialDramaTable.user_id, userId),
           sql`${financialDramaTable.date} <= ${todayStr}`,
         ),
@@ -192,8 +177,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
       totalBalance,
       monthlyExpenses,
       monthlyBlessings,
-      mistakes,
-      blessings,
+      recentDramas,
       upcomingRecurring,
       overdueRecurring,
     };
@@ -211,8 +195,7 @@ function HomePage() {
     totalBalance,
     monthlyExpenses,
     monthlyBlessings,
-    mistakes,
-    blessings,
+    recentDramas,
     upcomingRecurring,
     overdueRecurring,
   } = Route.useLoaderData();
@@ -266,31 +249,16 @@ function HomePage() {
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Recent Mistakes
+              Recent Financial Dramas
             </h2>
             <Link
-              to="/home/mistakes"
+              to="/home/financial-drama"
               className="text-xs text-primary hover:underline"
             >
               View All
             </Link>
           </div>
-          <MistakesList mistakes={mistakes} />
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Recent Blessings
-            </h2>
-            <Link
-              to="/home/blessings"
-              className="text-xs text-primary hover:underline"
-            >
-              View All
-            </Link>
-          </div>
-          <BlessingsList blessings={blessings} />
+          <RecentFinancialDramas items={recentDramas} />
         </div>
 
         {overdueRecurring.length > 0 && (

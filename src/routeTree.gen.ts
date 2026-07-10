@@ -18,6 +18,7 @@ import { Route as FinancialDramaIdRouteImport } from './routes/financial-drama/$
 import { Route as HomeOnboardingIndexRouteImport } from './routes/home/onboarding/index'
 import { Route as HomeMistakesIndexRouteImport } from './routes/home/mistakes/index'
 import { Route as HomeForecastIndexRouteImport } from './routes/home/forecast/index'
+import { Route as HomeFinancialDramaIndexRouteImport } from './routes/home/financial-drama/index'
 import { Route as HomeBudgetsIndexRouteImport } from './routes/home/budgets/index'
 import { Route as HomeBlessingsIndexRouteImport } from './routes/home/blessings/index'
 import { Route as HomeAnalyticsIndexRouteImport } from './routes/home/analytics/index'
@@ -68,6 +69,11 @@ const HomeForecastIndexRoute = HomeForecastIndexRouteImport.update({
   path: '/forecast/',
   getParentRoute: () => HomeRoute,
 } as any)
+const HomeFinancialDramaIndexRoute = HomeFinancialDramaIndexRouteImport.update({
+  id: '/financial-drama/',
+  path: '/financial-drama/',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeBudgetsIndexRoute = HomeBudgetsIndexRouteImport.update({
   id: '/budgets/',
   path: '/budgets/',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/home/analytics/': typeof HomeAnalyticsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
   '/home/budgets/': typeof HomeBudgetsIndexRoute
+  '/home/financial-drama/': typeof HomeFinancialDramaIndexRoute
   '/home/forecast/': typeof HomeForecastIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
   '/home/onboarding/': typeof HomeOnboardingIndexRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/home/analytics': typeof HomeAnalyticsIndexRoute
   '/home/blessings': typeof HomeBlessingsIndexRoute
   '/home/budgets': typeof HomeBudgetsIndexRoute
+  '/home/financial-drama': typeof HomeFinancialDramaIndexRoute
   '/home/forecast': typeof HomeForecastIndexRoute
   '/home/mistakes': typeof HomeMistakesIndexRoute
   '/home/onboarding': typeof HomeOnboardingIndexRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/home/analytics/': typeof HomeAnalyticsIndexRoute
   '/home/blessings/': typeof HomeBlessingsIndexRoute
   '/home/budgets/': typeof HomeBudgetsIndexRoute
+  '/home/financial-drama/': typeof HomeFinancialDramaIndexRoute
   '/home/forecast/': typeof HomeForecastIndexRoute
   '/home/mistakes/': typeof HomeMistakesIndexRoute
   '/home/onboarding/': typeof HomeOnboardingIndexRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/home/analytics/'
     | '/home/blessings/'
     | '/home/budgets/'
+    | '/home/financial-drama/'
     | '/home/forecast/'
     | '/home/mistakes/'
     | '/home/onboarding/'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/home/analytics'
     | '/home/blessings'
     | '/home/budgets'
+    | '/home/financial-drama'
     | '/home/forecast'
     | '/home/mistakes'
     | '/home/onboarding'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/home/analytics/'
     | '/home/blessings/'
     | '/home/budgets/'
+    | '/home/financial-drama/'
     | '/home/forecast/'
     | '/home/mistakes/'
     | '/home/onboarding/'
@@ -254,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeForecastIndexRouteImport
       parentRoute: typeof HomeRoute
     }
+    '/home/financial-drama/': {
+      id: '/home/financial-drama/'
+      path: '/financial-drama'
+      fullPath: '/home/financial-drama/'
+      preLoaderRoute: typeof HomeFinancialDramaIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/budgets/': {
       id: '/home/budgets/'
       path: '/budgets'
@@ -291,6 +310,7 @@ interface HomeRouteChildren {
   HomeAnalyticsIndexRoute: typeof HomeAnalyticsIndexRoute
   HomeBlessingsIndexRoute: typeof HomeBlessingsIndexRoute
   HomeBudgetsIndexRoute: typeof HomeBudgetsIndexRoute
+  HomeFinancialDramaIndexRoute: typeof HomeFinancialDramaIndexRoute
   HomeForecastIndexRoute: typeof HomeForecastIndexRoute
   HomeMistakesIndexRoute: typeof HomeMistakesIndexRoute
   HomeOnboardingIndexRoute: typeof HomeOnboardingIndexRoute
@@ -302,6 +322,7 @@ const HomeRouteChildren: HomeRouteChildren = {
   HomeAnalyticsIndexRoute: HomeAnalyticsIndexRoute,
   HomeBlessingsIndexRoute: HomeBlessingsIndexRoute,
   HomeBudgetsIndexRoute: HomeBudgetsIndexRoute,
+  HomeFinancialDramaIndexRoute: HomeFinancialDramaIndexRoute,
   HomeForecastIndexRoute: HomeForecastIndexRoute,
   HomeMistakesIndexRoute: HomeMistakesIndexRoute,
   HomeOnboardingIndexRoute: HomeOnboardingIndexRoute,

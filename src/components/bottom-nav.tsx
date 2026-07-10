@@ -31,7 +31,7 @@ export function BottomNav() {
 
       <Link
         to="/financial-drama"
-        className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-xl shadow-primary/25 -translate-y-5 active:scale-95 transition-transform ring-4 ring-card"
+        className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg shadow-black/15 dark:shadow-black/45 -translate-y-5 active:scale-95 transition-transform ring-4 ring-background"
         aria-label="Add"
       >
         <Plus size={26} />
