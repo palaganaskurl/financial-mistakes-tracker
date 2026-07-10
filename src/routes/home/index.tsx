@@ -7,7 +7,6 @@ import { accountsTable } from "@/db/accounts-schema";
 import { getDb } from "@/db/d1";
 import { financialDramaTable, recurringTable } from "@/db/schema";
 import BlessingsList from "./-blessings-list";
-import CurrentBalance from "./-current-balance";
 import FinancialDramaSkeleton from "./-financial-drama-skeleton";
 import MistakesList from "./-mistakes-list";
 
@@ -45,6 +44,18 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
         ),
       );
     const monthlyExpenses = Number(monthlyExpensesResult[0]?.total ?? 0);
+
+    const monthlyBlessingsResult = await db
+      .select({ total: sum(financialDramaTable.amount) })
+      .from(financialDramaTable)
+      .where(
+        and(
+          eq(financialDramaTable.type, "blessing"),
+          eq(financialDramaTable.user_id, userId),
+          sql`strftime('%Y-%m', ${financialDramaTable.date}) = strftime('%Y-%m', ${todayStr})`,
+        ),
+      );
+    const monthlyBlessings = Number(monthlyBlessingsResult[0]?.total ?? 0);
 
     const mistakes = await db
       .select()
@@ -180,6 +191,7 @@ const getHomeData = createServerFn({ method: "GET" }).handler(
     return {
       totalBalance,
       monthlyExpenses,
+      monthlyBlessings,
       mistakes,
       blessings,
       upcomingRecurring,
@@ -198,42 +210,55 @@ function HomePage() {
   const {
     totalBalance,
     monthlyExpenses,
+    monthlyBlessings,
     mistakes,
     blessings,
     upcomingRecurring,
     overdueRecurring,
   } = Route.useLoaderData();
 
-  const currentDate = new Date();
-  const currentMonth = currentDate.toLocaleString("en-US", { month: "long" });
-  const currentYear = currentDate.getFullYear();
-
   return (
     <div className="w-full px-4 md:px-6">
       <div className="flex flex-col gap-6 py-6">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
-            Financial Drama
+        <div className="flex flex-col items-center gap-1 py-2">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+            Net Balance
           </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {currentMonth}{" "}
-            <span className="text-muted-foreground font-normal text-2xl">
-              {currentYear}
-            </span>
-          </h1>
+          <p
+            className={`text-4xl font-bold tracking-tight ${
+              totalBalance >= 0 ? "text-primary" : "text-destructive"
+            }`}
+          >
+            {new Intl.NumberFormat("en-PH", {
+              style: "currency",
+              currency: "PHP",
+            }).format(totalBalance)}
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <CurrentBalance balance={totalBalance} label="Total Balance" />
-          <Card className="flex-1 px-4">
+          <Card className="px-4 rounded-xl">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-              Monthly Expenses
+              Mistakes
             </p>
-            <p className="text-xl font-bold text-destructive">
+            <p className="text-xl font-bold text-destructive flex items-center gap-1">
+              <span className="text-base font-semibold">−</span>
               {new Intl.NumberFormat("en-PH", {
                 style: "currency",
                 currency: "PHP",
               }).format(monthlyExpenses)}
+            </p>
+          </Card>
+          <Card className="px-4 rounded-xl">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+              Blessings
+            </p>
+            <p className="text-xl font-bold text-blessing flex items-center gap-1">
+              <span className="text-base font-semibold">+</span>
+              {new Intl.NumberFormat("en-PH", {
+                style: "currency",
+                currency: "PHP",
+              }).format(monthlyBlessings)}
             </p>
           </Card>
         </div>

@@ -41,12 +41,12 @@ export default function BlessingsList({ blessings }: BlessingsListProps) {
             {items.map((blessing) => (
               <div
                 key={blessing.id}
-                className="flex justify-between items-center px-4 py-3 bg-card ring-1 ring-foreground/10 hover:bg-accent/40 transition-colors"
+                className="flex items-center gap-2 p-3 ring-1 ring-foreground/10 rounded-xl"
               >
-                <span className="text-sm flex-1 font-medium">
+                <span className="text-sm flex-1 font-medium min-w-0">
                   {BlessingCategoryToLabelMap[blessing.category]}
                 </span>
-                <span className="text-sm font-semibold text-blessing text-right flex-1">
+                <span className="text-sm font-semibold text-blessing whitespace-nowrap">
                   +
                   {new Intl.NumberFormat("en-PH", {
                     style: "currency",
