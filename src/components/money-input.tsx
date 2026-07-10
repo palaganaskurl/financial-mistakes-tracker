@@ -2,11 +2,11 @@ import type {
   ChangeEvent,
   ComponentProps,
   FocusEvent,
-  MutableRefObject,
   Ref,
+  RefObject,
 } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@base-ui/react/input";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type MoneyInputProps = Omit<
@@ -52,10 +52,12 @@ function getDisplayValue(value?: number | null) {
 
 function setInputRefs(
   node: HTMLInputElement | null,
-  internalRef: MutableRefObject<HTMLInputElement | null>,
+  internalRef: RefObject<HTMLInputElement | null>,
   forwardedRef: Ref<HTMLInputElement> | undefined,
 ) {
-  internalRef.current = node;
+  if (internalRef && "current" in internalRef) {
+    internalRef.current = node;
+  }
 
   if (typeof forwardedRef === "function") {
     forwardedRef(node);
@@ -119,7 +121,9 @@ function MoneyInput({
       </span>
       <Input
         {...props}
-        ref={(node) => setInputRefs(node as HTMLInputElement | null, inputRef, ref)}
+        ref={(node) =>
+          setInputRefs(node as HTMLInputElement | null, inputRef, ref)
+        }
         type="text"
         inputMode="decimal"
         pattern="[0-9,.]*"
@@ -127,10 +131,7 @@ function MoneyInput({
         value={displayValue}
         onChange={handleChange}
         onBlur={handleBlur}
-        className={cn(
-          "w-full rounded-xl border-none bg-muted py-4 pl-10 pr-4 text-lg font-semibold text-foreground outline-none transition-all placeholder:text-muted-foreground focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring/50",
-          className,
-        )}
+        className={cn("w-full pl-10", className)}
       />
     </div>
   );

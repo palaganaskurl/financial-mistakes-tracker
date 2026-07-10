@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
+import { MoneyInput } from "#/components/money-input";
 import { addMistake } from "@/actions/add-mistake";
 import { updateFinancialDrama } from "@/actions/update-financial-drama";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { MoneyInput } from "@/components/ui/money-input";
 import {
   Popover,
   PopoverContent,
@@ -228,7 +228,7 @@ export default function AddFinancialDramaForm({
                       type="button"
                       variant="outline"
                       data-empty={!field.value}
-                      className="w-full justify-start rounded-xl border-none bg-muted py-4 px-4 text-sm font-medium text-foreground data-[empty=true]:text-muted-foreground hover:bg-muted"
+                      className="w-full justify-start"
                     />
                   }
                 >
@@ -279,10 +279,7 @@ export default function AddFinancialDramaForm({
                 value={field.value?.[0] ?? ""}
                 onValueChange={(val) => field.onChange([val])}
               >
-                <SelectTrigger
-                  type="button"
-                  className="w-full rounded-xl border-none bg-muted py-4 px-4 text-sm font-medium"
-                >
+                <SelectTrigger type="button" className="w-full">
                   <SelectValue placeholder="Select Category">
                     {(value) =>
                       categories.find((cat) => cat.value === value)?.label ??
@@ -319,10 +316,7 @@ export default function AddFinancialDramaForm({
                 value={field.value?.[0] ?? ""}
                 onValueChange={(val) => field.onChange([val])}
               >
-                <SelectTrigger
-                  type="button"
-                  className="w-full rounded-xl border-none bg-muted py-4 px-4 text-sm font-medium"
-                >
+                <SelectTrigger type="button" className="w-full">
                   <SelectValue placeholder="Select Account">
                     {(value) =>
                       accounts.find((a) => a.id.toString() === value)?.name ??
@@ -377,7 +371,6 @@ export default function AddFinancialDramaForm({
           <Textarea
             id="notes"
             placeholder="Enter notes"
-            className="rounded-xl border-none bg-muted px-4 py-4 text-sm font-medium"
             {...register("notes")}
           />
           {formState.errors.notes && (

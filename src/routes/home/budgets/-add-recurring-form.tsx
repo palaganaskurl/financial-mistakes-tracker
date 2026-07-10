@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
+import { MoneyInput } from "#/components/money-input";
 import { addRecurring } from "@/actions/add-recurring";
 import { updateRecurring } from "@/actions/update-recurring";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MoneyInput } from "@/components/ui/money-input";
 import {
   Popover,
   PopoverContent,

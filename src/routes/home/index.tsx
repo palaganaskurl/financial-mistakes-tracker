@@ -237,8 +237,8 @@ function HomePage() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <Card className="px-4 rounded-xl">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+          <Card className="px-4">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               Mistakes
             </p>
             <p className="text-xl font-bold text-destructive flex items-center gap-1">
@@ -249,8 +249,8 @@ function HomePage() {
               }).format(monthlyExpenses)}
             </p>
           </Card>
-          <Card className="px-4 rounded-xl">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+          <Card className="px-4">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               Blessings
             </p>
             <p className="text-xl font-bold text-blessing flex items-center gap-1">

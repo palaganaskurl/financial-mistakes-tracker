@@ -1,10 +1,10 @@
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
+import { MoneyInput } from "#/components/money-input";
 import { updateAccount } from "@/actions/update-account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MoneyInput } from "@/components/ui/money-input";
 import {
   Select,
   SelectContent,

@@ -1,10 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { MoneyInput } from "#/components/money-input";
 import { completeOnboarding } from "@/actions/complete-onboarding";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MoneyInput } from "@/components/ui/money-input";
 import {
   Select,
   SelectContent,
@@ -38,9 +38,7 @@ export function OnboardingForm() {
         navigate({ to: "/home" });
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to create account",
-      );
+      setError(err instanceof Error ? err.message : "Failed to create account");
     } finally {
       setIsLoading(false);
     }
@@ -104,11 +102,7 @@ export function OnboardingForm() {
         </div>
       )}
 
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={isLoading}
-      >
+      <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Setting up..." : "Get Started"}
       </Button>
     </form>

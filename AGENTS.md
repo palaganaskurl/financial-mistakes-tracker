@@ -3,3 +3,7 @@
 - Prioritize mobile first.
 - Database is using D1 Cloudflare SQL.
 - Stop adding too much comments.
+
+Terminologies
+- Mistakes (expenses)
+- Blessings (incomes)

@@ -41,8 +41,7 @@ function AddFinancialDramaPage() {
   return (
     <AppShell>
       <div className="max-w-2xl mx-auto py-8 px-4 md:px-6">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-2xl font-bold">Add Financial Drama</h1>
+        <div className="flex flex-col gap-6 pb-12">
           <AddFinancialDramaForm accounts={accounts} />
         </div>
       </div>

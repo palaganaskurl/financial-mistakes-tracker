@@ -2,11 +2,11 @@ import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { MoneyInput } from "#/components/money-input";
 import { addTransfer } from "@/actions/add-transfer";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-import { MoneyInput } from "@/components/ui/money-input";
 import {
   Popover,
   PopoverContent,

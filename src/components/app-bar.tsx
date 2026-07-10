@@ -12,12 +12,12 @@ const routeTitles: Record<string, string> = {
   "/home/budgets/": "Budgets",
   "/home/analytics/": "Analytics",
   "/home/forecast/": "Forecast",
-  "/financial-drama/": "Add Entry",
-  "/financial-drama/$id": "Edit Entry",
+  "/financial-drama/": "Add Financial Drama",
+  "/financial-drama/$id": "Edit Financial Drama",
 };
 
 function getTitle(routeId: string): string {
-  if (routeId === "/financial-drama/$id") return "Edit Entry";
+  if (routeId === "/financial-drama/$id") return "Edit Financial Drama";
 
   return routeTitles[routeId] ?? "Financial Drama";
 }
